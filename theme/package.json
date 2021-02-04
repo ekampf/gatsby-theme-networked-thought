@@ -1,0 +1,10 @@
+{
+  "name": "@ekampf/gatsby-theme-ekampf-digital-garden",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Eran Kampf (@ekampf)",
+  "license": "MIT",
+  "peerDependencies": {
+    "gatsby": "^2.32.0"
+  }
+}

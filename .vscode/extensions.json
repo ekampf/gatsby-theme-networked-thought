@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    // ESLint
+    "dbaeumer.vscode-eslint",
+    // Prettier
+    "esbenp.prettier-vscode",
+    // GraphQL syntax highlighting + linting + autocomplete
+    "apollographql.vscode-apollo",
+    // Spell checker
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

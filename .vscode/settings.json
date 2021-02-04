@@ -1,0 +1,18 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/public": true,
+    "**/.cache": true,
+    "src/__generated__": true
+  },
+  "editor.tabSize": 2,
+  // Run Prettier formatter on save
+  "editor.formatOnSave": true,
+  // Run ESLint autofix on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.autoSave": "onFocusChange",
+
+  "cSpell.words": ["frontmatter"]
+}
