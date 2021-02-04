@@ -8,6 +8,7 @@
     "gatsby": "^2.32.0"
   },
   "dependencies": {
-    "gatsby-plugin-theme-ui": "^0.3.5"
+    "gatsby-plugin-theme-ui": "^0.3.5",
+    "theme-ui": "^0.3.5"
   }
 }
