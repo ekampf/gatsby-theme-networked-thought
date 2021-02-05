@@ -10,9 +10,46 @@
   "editor.formatOnSave": true,
   // Run ESLint autofix on save
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "source.fixAll": true,
+    "source.organizeImports": true
   },
   "files.autoSave": "onFocusChange",
 
-  "cSpell.words": ["frontmatter"]
+  "cSpell.words": ["frontmatter"],
+
+  // Files to not show on editor
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/public": true,
+    "**/node_modules": true,
+    "**/.cache": true,
+    "**/package-lock.json": true
+  },
+
+  // psi-header
+  "psi-header.variables": [
+    ["author", "Eran Kampf"],
+    ["authoremail", "@ekampf"]
+  ],
+  "psi-header.templates": [
+    {
+      "language": "*",
+      "template": [
+        "File: <<filerelativepath>>",
+        "Project: <<projectname>>",
+        "Created Date: <<filecreated('dddd MMMM Do YYYY')>>",
+        "Author: <<author>>",
+        "-----",
+        "Last Modified: <<filecreated('dddd MMMM Do YYYY h:mm:ss a')>>",
+        "Modified By: <<author>> <<<authoremail>>>",
+        "-----",
+        "Copyright (c) <<year>>"
+      ]
+    }
+  ]
 }
