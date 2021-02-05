@@ -24,13 +24,6 @@ module.exports = ({
         ],
       },
     },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        name: "content",
-        path: "content",
-      },
-    },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
   ],
