@@ -3,6 +3,7 @@
   "scripts": {
     "build": "yarn workspace example build",
     "develop": "yarn workspace example develop",
+    "start": "yarn workspace example develop",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "yarn lint --fix"
