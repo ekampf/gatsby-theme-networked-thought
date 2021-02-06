@@ -1,27 +1,38 @@
-const path = require("path");
+/* eslint-disable @typescript-eslint/no-unused-vars */
+const chokidar = require(`chokidar`);
+const fs = require(`fs`);
+const path = require(`path`);
+const { createMachine, interpret } = require(`xstate`);
 
-const chokidar = require("chokidar");
-const {
-  createMachine,
-  interpret,
-  // actions: { log },
-} = require(`xstate`);
+/**
+ * Create a state machine to manage Chokidar's not-ready/ready states.
+ */
+const createFSMachine = ({ actions: { createNode, deleteNode }, getNode, createNodeId, reporter }, pluginOptions) => {
+  const createAndProcessNode = (path) => {
+    // const fileNodePromise = createFileNode(path, createNodeId, pluginOptions).then((fileNode) => {
+    //   createNode(fileNode);
+    //   return null;
+    // });
+    // return fileNodePromise;
 
-function generateNodes(actions, createNodeId, createContentDigest, pluginOptions) {
-  console.log("generateNodes called");
-}
+    // eslint-disable-next-line no-console
+    console.log(`createAndProcessNode called!`);
+  };
 
-function createStateMachine({ actions, createNodeId, createContentDigest, reporter }, themeOptions) {
-  let processingQueue = [];
-  const flushProcessingQueue = () => {
-    let queue = processingQueue.slice();
-    processingQueue = null;
+  // For every path that is reported before the 'ready' event, we throw them
+  // into a queue and then flush the queue when 'ready' event arrives.
+  // After 'ready', we handle the 'add' event without putting it into a queue.
+  let pathQueue = [];
+  const flushPathQueue = () => {
+    let queue = pathQueue.slice();
+    pathQueue = null;
     return Promise.all(
+      // eslint-disable-next-line consistent-return
       queue.map(({ op, path }) => {
         switch (op) {
           case `delete`:
           case `upsert`:
-            return generateNodes(actions, createNodeId, createContentDigest, themeOptions);
+            return createAndProcessNode(path);
         }
       }),
     );
@@ -29,17 +40,13 @@ function createStateMachine({ actions, createNodeId, createContentDigest, report
 
   const log = (expr) => (ctx, action, meta) => {
     if (meta.state.matches(`BOOTSTRAP.BOOTSTRAPPED`)) {
-      if (typeof expr == "function") {
-        reporter.info(expr(ctx, action, meta));
-      } else {
-        reporter.info(expr);
-      }
+      reporter.info(expr(ctx, action, meta));
     }
   };
 
-  const stateMachine = createMachine(
+  const fsMachine = createMachine(
     {
-      id: `digitalGardenStateMachine`,
+      id: `fs`,
       type: `parallel`,
       states: {
         BOOTSTRAP: {
@@ -55,28 +62,28 @@ function createStateMachine({ actions, createNodeId, createContentDigest, report
             },
           },
         },
-        WATCHING: {
+        CHOKIDAR: {
           initial: `NOT_READY`,
           states: {
             NOT_READY: {
               on: {
-                WATCHER_READY: `READY`,
-                WATCHER_ADD: { actions: `queueNodeProcessing` },
-                WATCHER_CHANGE: { actions: `queueNodeProcessing` },
-                WATCHER_UNLINK: { actions: `queueNodeDeleting` },
+                CHOKIDAR_READY: `READY`,
+                CHOKIDAR_ADD: { actions: `queueNodeProcessing` },
+                CHOKIDAR_CHANGE: { actions: `queueNodeProcessing` },
+                CHOKIDAR_UNLINK: { actions: `queueNodeDeleting` },
               },
-              exit: `flushProcessingQueue`,
+              exit: `flushPathQueue`,
             },
             READY: {
               on: {
-                WATCHER_ADD: {
-                  actions: [log((_, { pathType, path }) => `added ${pathType} at ${path}`), `generateNodes`],
+                CHOKIDAR_ADD: {
+                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `added ${pathType} at ${path}`)],
                 },
-                WATCHER_CHANGE: {
-                  actions: [log((_, { pathType, path }) => `changed ${pathType} at ${path}`), `generateNodes`],
+                CHOKIDAR_CHANGE: {
+                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `changed ${pathType} at ${path}`)],
                 },
-                WATCHER_UNLINK: {
-                  actions: [log((_, { pathType, path }) => `deleted ${pathType} at ${path}`), `generateNodes`],
+                CHOKIDAR_UNLINK: {
+                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `deleted ${pathType} at ${path}`)],
                 },
               },
             },
@@ -86,64 +93,65 @@ function createStateMachine({ actions, createNodeId, createContentDigest, report
     },
     {
       actions: {
-        generateNodes() {
-          generateNodes(actions, createNodeId, createContentDigest, themeOptions);
+        createAndProcessNode(_, { pathType, path }) {
+          createAndProcessNode(path).catch((err) => reporter.error(err));
         },
-        flushProcessingQueue(_, { resolve, reject }) {
-          flushProcessingQueue().then(resolve, reject);
+        flushPathQueue(_, { resolve, reject }) {
+          flushPathQueue().then(resolve, reject);
         },
         queueNodeDeleting(_, { path }) {
-          processingQueue.push({ op: `delete`, path });
+          pathQueue.push({ op: `delete`, path });
         },
         queueNodeProcessing(_, { path }) {
-          processingQueue.push({ op: `upsert`, path });
+          pathQueue.push({ op: `upsert`, path });
         },
       },
     },
   );
+  return interpret(fsMachine).start();
+};
 
-  return interpret(stateMachine)
-    .onTransition((state) =>
-      reporter.info(`Digital Garden: state transition to (${state.value.BOOTSTRAP}, ${state.value.WATCHING})`),
-    )
-    .start();
-}
+module.exports = async (api, pluginOptions) => {
+  // Validate that the path exists.
+  if (!fs.existsSync(pluginOptions.notesDirectory)) {
+    api.reporter.panic(`
+The path passed to gatsby-source-filesystem does not exist on your file system:
+${pluginOptions.path}
+Please pick a path to an existing directory.
+      `);
+  }
 
-module.exports = async (gatsbyApi, themeOptions) => {
-  const { notesDirectory = "content/garden/" } = themeOptions;
+  // Validate that the path is absolute.
+  // Absolute paths are required to resolve images correctly.
+  if (!path.isAbsolute(pluginOptions.notesDirectory)) {
+    pluginOptions.notesDirectory = path.resolve(process.cwd(), pluginOptions.notesDirectory);
+  }
 
-  gatsbyApi.emitter.on(`BOOTSTRAP_FINISHED`, () => {
-    machine.send(`BOOTSTRAP_FINISHED`);
+  const fsMachine = createFSMachine(api, pluginOptions);
+
+  // Once bootstrap is finished, we only let one File node update go through
+  // the system at a time.
+  api.emitter.on(`BOOTSTRAP_FINISHED`, () => {
+    fsMachine.send(`BOOTSTRAP_FINISHED`);
   });
 
-  const machine = createStateMachine(gatsbyApi, themeOptions);
-
-  const watchPath = path.resolve(process.cwd(), notesDirectory);
-  const watcher = chokidar.watch(watchPath);
+  const watcher = chokidar.watch(pluginOptions.notesDirectory);
 
   watcher.on(`add`, (path) => {
-    machine.send({ type: `WATCHER_ADD`, pathType: `file`, path });
+    fsMachine.send({ type: `CHOKIDAR_ADD`, pathType: `file`, path });
   });
 
   watcher.on(`change`, (path) => {
-    machine.send({
-      type: `WATCHER_CHANGE`,
-      pathType: `file`,
-      path,
-    });
+    fsMachine.send({ type: `CHOKIDAR_CHANGE`, pathType: `file`, path });
   });
 
   watcher.on(`unlink`, (path) => {
-    machine.send({
-      type: `WATCHER_UNLINK`,
-      pathType: `file`,
-      path,
-    });
+    fsMachine.send({ type: `CHOKIDAR_UNLINK`, pathType: `file`, path });
   });
 
   return new Promise((resolve, reject) => {
     watcher.on(`ready`, () => {
-      machine.send({ type: `WATCHER_READY`, resolve, reject });
+      fsMachine.send({ type: `CHOKIDAR_READY`, resolve, reject });
     });
   });
 };

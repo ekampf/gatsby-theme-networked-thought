@@ -1,10 +1,4 @@
-module.exports = ({
-  notesDirectory = "content/garden/", // Directory containing your digital garden notes
-  rootPath = "/",
-  rootNode = "about",
-  hideDoubleBrackets = true,
-  rssTitle = "gatsby-theme-ekampf-digital-garden generated rss feed",
-}) => ({
+module.exports = () => ({
   plugins: [
     `gatsby-plugin-theme-ui`,
     {
