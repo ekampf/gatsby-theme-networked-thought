@@ -6,8 +6,8 @@
 mkdir my-site
 cd my-site
 yarn init
-# install @ekampf/gatsby-theme-ekampf-digital-garden and it's dependencies
-yarn add gatsby react react-dom @ekampf/gatsby-theme-ekampf-digital-garden
+# install @ekampf/gatsby-theme-networked-thought and it's dependencies
+yarn add gatsby react react-dom @ekampf/gatsby-theme-networked-thought
 ```
 
 Then add the theme to your `gatsby-config.js`. We'll use the long-form
@@ -17,7 +17,7 @@ here for educational purposes.
 module.exports = {
   plugins: [
     {
-      resolve: "@ekampf/gatsby-theme-ekampf-digital-garden",
+      resolve: "@ekampf/gatsby-theme-networked-thought",
       options: {},
     },
   ],
