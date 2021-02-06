@@ -2,7 +2,7 @@ module.exports = ({ actions, reporter }) => {
   const { createTypes } = actions;
 
   const typeDefs = `
-    type Note implements Node @infer {
+    type Thought implements Node @infer {
       title: String!
       slug: String!
       rawContent: String
@@ -10,9 +10,9 @@ module.exports = ({ actions, reporter }) => {
       noteTemplate: String
       aliases: [String]
       outboundReferences: [String]
-      outboundReferenceNotes: [Note] @link(from: "outboundReferenceNotes___NODE")
+      outboundReferenceThoughts: [Thought] @link(from: "outboundReferenceThoughts___NODE")
       inboundReferences: [String]
-      inboundReferenceNotes: [Note] @link(from: "inboundReferenceNotes___NODE")
+      inboundReferenceThoughts: [Thought] @link(from: "inboundReferenceThoughts___NODE")
       inboundReferencePreview: [InboundReferencePreview]
       childMdx: Mdx
     }
