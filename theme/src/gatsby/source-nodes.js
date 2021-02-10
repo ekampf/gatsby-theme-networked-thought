@@ -3,21 +3,16 @@ const chokidar = require(`chokidar`);
 const fs = require(`fs`);
 const path = require(`path`);
 const { createMachine, interpret } = require(`xstate`);
+const matter = require("gray-matter");
+const unified = require("unified");
+const markdown = require("remark-parse");
+const util = require("util");
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
  */
-const createFSMachine = ({ actions: { createNode, deleteNode }, getNode, createNodeId, reporter }, pluginOptions) => {
-  const createAndProcessNode = (path) => {
-    // const fileNodePromise = createFileNode(path, createNodeId, pluginOptions).then((fileNode) => {
-    //   createNode(fileNode);
-    //   return null;
-    // });
-    // return fileNodePromise;
-
-    // eslint-disable-next-line no-console
-    console.log(`createAndProcessNode called!`);
-  };
+const createFSMachine = (api, pluginOptions) => {
+  const { reporter } = api;
 
   // For every path that is reported before the 'ready' event, we throw them
   // into a queue and then flush the queue when 'ready' event arrives.
@@ -26,16 +21,7 @@ const createFSMachine = ({ actions: { createNode, deleteNode }, getNode, createN
   const flushPathQueue = () => {
     const queue = pathQueue.slice();
     pathQueue = null;
-    return Promise.all(
-      // eslint-disable-next-line consistent-return
-      queue.map(({ op, path }) => {
-        switch (op) {
-          case `delete`:
-          case `upsert`:
-            return createAndProcessNode(path);
-        }
-      }),
-    );
+    return generateThoughts(api, pluginOptions);
   };
 
   const log = (expr) => (ctx, action, meta) => {
@@ -94,10 +80,11 @@ const createFSMachine = ({ actions: { createNode, deleteNode }, getNode, createN
     {
       actions: {
         createAndProcessNode(_, { pathType, path }) {
-          createAndProcessNode(path).catch((err) => reporter.error(err));
+          generateThoughts(api, pluginOptions);
         },
         flushPathQueue(_, { resolve, reject }) {
-          flushPathQueue().then(resolve, reject);
+          flushPathQueue();
+          resolve();
         },
         queueNodeDeleting(_, { path }) {
           pathQueue.push({ op: `delete`, path });
@@ -113,9 +100,9 @@ const createFSMachine = ({ actions: { createNode, deleteNode }, getNode, createN
 
 module.exports = async (api, pluginOptions) => {
   // Validate that the path exists.
-  if (!fs.existsSync(pluginOptions.notesDirectory)) {
+  if (!fs.existsSync(pluginOptions.thoughtsDirectory)) {
     api.reporter.panic(`
-The path passed to gatsby-source-filesystem does not exist on your file system:
+The path passed to gatsby-theme-networked-thought does not exist on your file system:
 ${pluginOptions.path}
 Please pick a path to an existing directory.
       `);
@@ -123,8 +110,8 @@ Please pick a path to an existing directory.
 
   // Validate that the path is absolute.
   // Absolute paths are required to resolve images correctly.
-  if (!path.isAbsolute(pluginOptions.notesDirectory)) {
-    pluginOptions.notesDirectory = path.resolve(process.cwd(), pluginOptions.notesDirectory);
+  if (!path.isAbsolute(pluginOptions.thoughtsDirectory)) {
+    pluginOptions.thoughtsDirectory = path.resolve(process.cwd(), pluginOptions.thoughtsDirectory) + "/";
   }
 
   const fsMachine = createFSMachine(api, pluginOptions);
@@ -135,7 +122,7 @@ Please pick a path to an existing directory.
     fsMachine.send(`BOOTSTRAP_FINISHED`);
   });
 
-  const watcher = chokidar.watch(pluginOptions.notesDirectory);
+  const watcher = chokidar.watch(pluginOptions.thoughtsDirectory + "/**/*.md*");
 
   watcher.on(`add`, (path) => {
     fsMachine.send({ type: `CHOKIDAR_ADD`, pathType: `file`, path });
@@ -155,3 +142,142 @@ Please pick a path to an existing directory.
     });
   });
 };
+
+function getMarkdownNotes({ thoughtsDirectory, generateSlug }) {
+  let filenames = fs.readdirSync(thoughtsDirectory);
+
+  return filenames
+    .filter((filename) => {
+      return [".md", ".mdx"].includes(path.extname(filename).toLowerCase());
+    })
+    .map((filename) => {
+      const slug = generateSlug(path.parse(filename).name);
+      const fullPath = thoughtsDirectory + filename;
+      const rawContent = fs.readFileSync(fullPath, "utf-8");
+      return {
+        filename,
+        fullPath,
+        slug,
+        rawContent,
+      };
+    });
+}
+
+function generateThoughts(api, pluginOptions) {
+  const { actions } = api;
+  const { reporter } = api;
+  let markdownThoughts = getMarkdownNotes(pluginOptions);
+  let { slugToThoughtMap, nameToSlugMap, allReferences } = processMarkdownThoughts(
+    markdownThoughts,
+    pluginOptions,
+    reporter,
+  );
+
+  // allReferences.forEach((reference) => {
+  //   const { source, sourceInnerReferences } = reference;
+  //   if (sourceInnerReferences === null) {
+  //     return;
+  //   }
+
+  //   sourceInnerReferences.forEach((innerRef) => {
+  //     const { text } = innerRef;
+  //     const textLower = text.toLowerCase();
+  //     const textLowerSlugified = pluginOptions.generateSlug(textLower);
+
+  //     if (nameToSlugMap[lower] == null) {
+  //     }
+  //   });
+  // });
+
+  slugToThoughtMap.forEach((thought, slug) => {
+    const nodeData = {
+      slug,
+      title: thought.title,
+      aliases: thought.aliases,
+      // absolutePath: thought.fullPath,
+    };
+
+    const nodeContent = JSON.stringify(nodeData);
+
+    const nodeMeta = {
+      id: api.createNodeId(`Thought::${slug}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: `Thought`,
+        mediaType: `text/markdown`,
+        content: nodeContent,
+        contentDigest: api.createContentDigest(nodeData),
+      },
+    };
+
+    const node = Object.assign({}, nodeData, nodeMeta);
+    console.log(`Creating node: `, util.inspect(node, false, null, true));
+    actions.createNode(node);
+  });
+}
+
+function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
+  const slugToThoughtMap = new Map();
+  const nameToSlugMap = new Map();
+  let allReferences = [];
+
+  markdownThoughts.forEach(({ filename, fullPath, slug, rawContent }) => {
+    reporter.info(`processing thought ${filename}`);
+    const { content, data: frontmatter, excerpt } = matter(rawContent);
+    let tree = unified().use(markdown).parse(content);
+
+    nameToSlugMap.set(slug, slug);
+    if (frontmatter.title) {
+      nameToSlugMap.set(frontmatter.title.toLowerCase(), slug);
+    }
+
+    const aliases = [];
+    if (frontmatter.aliases != null) {
+      frontmatter.aliases
+        .map((a) => a.trim().toLowerCase())
+        .forEach((a) => {
+          nameToSlugMap.set(a, slug);
+          aliases.push(a);
+        });
+    }
+
+    const references = [];
+
+    const regex = /(?<=\[\[).*?(?=\]\])/g;
+    let referencesMatches = [...content.matchAll(regex)] || [];
+    referencesMatches.forEach((match) => {
+      const text = match[0];
+      let start = match.index;
+
+      references.push({
+        text: text,
+      });
+    });
+
+    allReferences.push({
+      source: slug,
+      references,
+    });
+
+    if (frontmatter.title == null) {
+      frontmatter.title = slug;
+    }
+
+    slugToThoughtMap.set(slug, {
+      title: frontmatter.title,
+      content: content,
+      rawContent: rawContent,
+      fullPath: fullPath,
+      frontmatter,
+      aliases,
+      references,
+    });
+  });
+
+  return {
+    slugToThoughtMap,
+    nameToSlugMap,
+    allReferences,
+  };
+}

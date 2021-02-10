@@ -16,7 +16,11 @@
   },
   "files.autoSave": "onFocusChange",
 
-  "cSpell.words": ["frontmatter"],
+  "cSpell.words": [
+    "Chokidar's",
+    "frontmatter",
+    "xstate"
+  ],
 
   // Files to not show on editor
   "files.exclude": {

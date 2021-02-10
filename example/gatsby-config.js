@@ -3,7 +3,7 @@ module.exports = {
     {
       resolve: `@ekampf/gatsby-theme-networked-thought`,
       options: {
-        rootPath: "/aalalals",
+        rootPath: "./content/garden/",
       },
     },
   ],
