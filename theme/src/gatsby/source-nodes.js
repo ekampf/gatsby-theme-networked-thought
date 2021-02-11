@@ -230,7 +230,7 @@ function generateThoughts(api, pluginOptions) {
       internal: {
         type: `Thought`,
         mediaType: `text/markdown`,
-        content: nodeContent,
+        content: content,
         contentDigest: api.createContentDigest(nodeData),
       },
     };
