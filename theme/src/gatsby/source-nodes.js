@@ -161,7 +161,7 @@ const getAllFiles = function (dirPath, arrayOfFiles) {
   return arrayOfFiles;
 };
 
-function getMarkdownNotes({ thoughtsDirectory, generateSlug }) {
+function getMarkdownThoughts({ thoughtsDirectory, generateSlug }) {
   // let filenames = fs.readdirSync(thoughtsDirectory);
   const filenames = getAllFiles(thoughtsDirectory).map((filename) => filename.slice(thoughtsDirectory.length));
 
@@ -188,7 +188,7 @@ function getMarkdownNotes({ thoughtsDirectory, generateSlug }) {
 function generateThoughts(api, pluginOptions) {
   const { actions } = api;
   const { reporter } = api;
-  let markdownThoughts = getMarkdownNotes(pluginOptions);
+  let markdownThoughts = getMarkdownThoughts(pluginOptions);
   let { slugToThoughtMap, nameToSlugMap, allReferences } = processMarkdownThoughts(
     markdownThoughts,
     pluginOptions,
