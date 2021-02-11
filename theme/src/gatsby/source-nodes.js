@@ -3,10 +3,12 @@ const chokidar = require(`chokidar`);
 const fs = require(`fs`);
 const path = require(`path`);
 const { createMachine, interpret } = require(`xstate`);
-const matter = require("gray-matter");
-const unified = require("unified");
-const markdown = require("remark-parse");
-const util = require("util");
+const matter = require(`gray-matter`);
+const unified = require(`unified`);
+const markdown = require(`remark-parse`);
+const util = require(`util`);
+
+const linkify = require(`./utils/linkify`);
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
@@ -143,21 +145,41 @@ Please pick a path to an existing directory.
   });
 };
 
+const getAllFiles = function (dirPath, arrayOfFiles) {
+  const files = fs.readdirSync(dirPath);
+
+  arrayOfFiles = arrayOfFiles || [];
+
+  files.forEach((file) => {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(path.join(dirPath, "/", file));
+    }
+  });
+
+  return arrayOfFiles;
+};
+
 function getMarkdownNotes({ thoughtsDirectory, generateSlug }) {
-  let filenames = fs.readdirSync(thoughtsDirectory);
+  // let filenames = fs.readdirSync(thoughtsDirectory);
+  const filenames = getAllFiles(thoughtsDirectory).map((filename) => filename.slice(thoughtsDirectory.length));
 
   return filenames
     .filter((filename) => {
       return [".md", ".mdx"].includes(path.extname(filename).toLowerCase());
     })
     .map((filename) => {
-      const slug = generateSlug(path.parse(filename).name);
+      const { dir, name } = path.parse(filename);
+      const noteName = path.join(dir, name);
+      const slug = generateSlug(noteName);
       const fullPath = thoughtsDirectory + filename;
       const rawContent = fs.readFileSync(fullPath, "utf-8");
       return {
         filename,
         fullPath,
         slug,
+        name: noteName,
         rawContent,
       };
     });
@@ -190,10 +212,12 @@ function generateThoughts(api, pluginOptions) {
   // });
 
   slugToThoughtMap.forEach((thought, slug) => {
+    const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {
       slug,
       title: thought.title,
       aliases: thought.aliases,
+      content: content,
       // absolutePath: thought.fullPath,
     };
 
@@ -222,12 +246,13 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
   const nameToSlugMap = new Map();
   let allReferences = [];
 
-  markdownThoughts.forEach(({ filename, fullPath, slug, rawContent }) => {
+  markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent }) => {
     reporter.info(`processing thought ${filename}`);
     const { content, data: frontmatter, excerpt } = matter(rawContent);
     let tree = unified().use(markdown).parse(content);
 
     nameToSlugMap.set(slug, slug);
+    nameToSlugMap.set(name.toLowerCase(), slug);
     if (frontmatter.title) {
       nameToSlugMap.set(frontmatter.title.toLowerCase(), slug);
     }
@@ -261,7 +286,7 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
     });
 
     if (frontmatter.title == null) {
-      frontmatter.title = slug;
+      frontmatter.title = name;
     }
 
     slugToThoughtMap.set(slug, {
