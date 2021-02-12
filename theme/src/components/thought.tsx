@@ -4,6 +4,7 @@ import { useWindowSize } from "react-use";
 import { Box, jsx, Styled, ThemeProvider } from "theme-ui";
 import theme from "../gatsby-plugin-theme-ui";
 import mdxComponents from "./mdx-components";
+import ThoughtFooter from "./thought-footer";
 
 interface ThoughtProps {
   thought: any;
@@ -21,7 +22,7 @@ export default function Thought({ thought }: ThoughtProps) {
         <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
       </Box>
       {/* <Footer references={note.inboundReferenceNotes} /> */}
-      **TODO: put references here**
+      <ThoughtFooter />
     </ThemeProvider>
   );
 }
