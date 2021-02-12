@@ -1,6 +1,8 @@
 import { graphql, PageProps } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 import React from "react";
-import { Layout } from "../components/layout";
+import Layout from "../components/layout";
+import ThoughtsContainer from "../components/thoughts-container";
 
 export const pageQuery = graphql`
   query Thought($id: String!) {
@@ -10,27 +12,34 @@ export const pageQuery = graphql`
       aliases
       content
       id
+      childMdx {
+        body
+      }
     }
   }
 `;
 
-interface ThoughtData {
-  thought: any;
-}
-
 interface ThoughtTemplateProps extends PageProps {
-  data: ThoughtData;
+  data: {
+    thought: any;
+  };
+  pageContext: {
+    slug: string;
+  };
 }
 
-export default function ThoughtTemplate(props: PageProps) {
-  console.log(props);
+export default function ThoughtTemplate(props: ThoughtTemplateProps) {
   const {
-    uri,
+    location,
     data: { thought },
+    pageContext: { slug },
   } = props;
   return (
     <Layout>
-      <h1>{thought.title}</h1>
+      <ThoughtsContainer thought={thought} location={location} slug={slug}>
+        <h1>{thought.title}</h1>
+        <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
+      </ThoughtsContainer>
     </Layout>
   );
 }

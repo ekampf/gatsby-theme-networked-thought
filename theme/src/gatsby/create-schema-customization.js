@@ -6,6 +6,7 @@ module.exports = ({ actions, reporter }) => {
       title: String!
       slug: String!
       aliases: [String]
+      childMdx: Mdx
     }
   `;
 
