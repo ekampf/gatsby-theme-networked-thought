@@ -1,3 +1,7 @@
+const OFF = 0;
+const WARNING = 1;
+const ERROR = 2;
+
 module.exports = {
   env: {
     browser: true,
@@ -27,6 +31,9 @@ module.exports = {
     // Prettier
     "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+    // Import
+    "plugin:import/recommended",
+    "plugin:import/typescript", // to support Typescript with the eslint-plugin-import
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
@@ -35,6 +42,43 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-var-requires": "off",
-    "react/prop-types": ["warn", { skipUndeclared: true }],
+
+    // Typescript has already validated the props.
+    "react/prop-types": OFF,
+
+    // Imports
+
+    // Because Typescript does validate the imported values and types, we don't need these rules.
+    // Also `eslint-plugin-import` has issues resolving Typescript modules. See this issue
+    // https://github.com/alexgorbatchev/eslint-import-resolver-typescript/issues/31
+    "import/named": OFF,
+    "import/default": OFF,
+    // Make optional rules required
+    "import/first": ERROR,
+    "import/newline-after-import": ERROR,
+    "import/no-duplicates": ERROR,
+    "import/no-named-as-default": ERROR,
+    "import/no-named-as-default-member": ERROR,
+    "import/order": [
+      ERROR,
+      {
+        groups: ["builtin", "external", "internal", "parent", "sibling"],
+        pathGroups: [
+          {
+            pattern: "~/**",
+            group: "internal",
+          },
+          {
+            pattern: "@twingate/ui",
+            group: "external",
+          },
+        ],
+        "newlines-between": "never",
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
 };
