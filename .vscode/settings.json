@@ -11,16 +11,11 @@
   // Run ESLint autofix on save
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-    "source.fixAll": true,
-    "source.organizeImports": true
+    "source.fixAll": true
   },
   "files.autoSave": "onFocusChange",
 
-  "cSpell.words": [
-    "Chokidar's",
-    "frontmatter",
-    "xstate"
-  ],
+  "cSpell.words": ["Chokidar's", "frontmatter", "xstate"],
 
   // Files to not show on editor
   "files.exclude": {
