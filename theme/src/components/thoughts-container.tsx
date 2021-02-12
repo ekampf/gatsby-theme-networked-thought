@@ -31,6 +31,7 @@ const StackedPageWrapper = ({ index, ...rest }) => (
 const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, index }) => {
   return (
     <Flex
+      as="article"
       bg={highlighted ? "accent" : "background"}
       px={3}
       sx={{
