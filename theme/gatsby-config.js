@@ -12,6 +12,7 @@ module.exports = () => ({
               maxWidth: 800,
             },
           },
+          `gatsby-remark-mermaid`,
           `gatsby-remark-code-titles`,
           `gatsby-remark-prismjs`,
           `gatsby-remark-smartypants`,
