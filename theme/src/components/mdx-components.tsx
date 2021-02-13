@@ -1,8 +1,8 @@
 /** @jsx jsx */
-import React from "react";
 import { Link } from "gatsby";
-import { jsx } from "theme-ui";
+import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
+import { jsx } from "theme-ui";
 
 const AnchorTag = ({ href, popups = {}, stacked = false, ...restProps }) => {
   if (!href) {
