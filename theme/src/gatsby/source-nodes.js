@@ -236,7 +236,6 @@ function generateThoughts(api, pluginOptions) {
     };
 
     const node = Object.assign({}, nodeData, nodeMeta);
-    console.log(`Creating node: `, util.inspect(node, false, null, true));
     actions.createNode(node);
   });
 }
