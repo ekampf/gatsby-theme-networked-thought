@@ -2,7 +2,7 @@
 import { Link } from "gatsby";
 import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
-import { jsx } from "theme-ui";
+import { Styled, jsx } from "theme-ui";
 
 const AnchorTag = ({ href, popups = {}, stacked = false, ...restProps }) => {
   if (!href) {
@@ -16,7 +16,7 @@ const AnchorTag = ({ href, popups = {}, stacked = false, ...restProps }) => {
     return <Link {...restProps} to={href} sx={{ variant: "links.internal" }} />;
   }
 
-  return <a {...restProps} href={href} />;
+  return <Styled.a {...restProps} href={href} />;
 };
 
 export default {
