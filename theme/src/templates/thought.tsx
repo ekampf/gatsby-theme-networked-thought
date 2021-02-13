@@ -35,11 +35,9 @@ export default function ThoughtTemplate(props: ThoughtTemplateProps) {
     pageContext: { slug },
   } = props;
   return (
-    <Layout>
-      <ThoughtsContainer thought={thought} location={location} slug={slug}>
-        <h1>{thought.title}</h1>
-        <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
-      </ThoughtsContainer>
-    </Layout>
+    <ThoughtsContainer thought={thought} location={location} slug={slug}>
+      <h1>{thought.title}</h1>
+      <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
+    </ThoughtsContainer>
   );
 }

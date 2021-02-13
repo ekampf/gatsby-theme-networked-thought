@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { graphql, useStaticQuery } from "gatsby";
 import React, { PropsWithChildren } from "react";
-import { Helmet } from "react-helmet";
+import { Global, css } from "@emotion/core";
 import {
   LinkToStacked,
   PageIndexProvider,
@@ -12,11 +12,11 @@ import { useWindowSize } from "react-use";
 import { Box, Flex, jsx } from "theme-ui";
 import Header from "./header";
 import Thought from "./thought";
+import SEO from "./seo";
 
 const COL_WIDTH = 576; // w-xl
 
 interface ThoughtsContainerProps {
-  index: number;
   thought: any;
   location: any;
   slug: string;
@@ -129,11 +129,32 @@ export default function ThoughtsContainer({
         minHeight: "100vh",
       }}
     >
-      <Helmet>
-        <title>
-          {data.site.siteMetadata.title} - {thought.title}
-        </title>
-      </Helmet>
+      <Global
+        styles={css`
+          *,
+          *::after,
+          *::before {
+            box-sizing: border-box;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+          }
+
+          .gatsby-code-title {
+            margin-bottom: -0.6rem;
+            padding: 0.25rem 1rem;
+            background-color: #dddddd;
+            color: #5c6e74;
+            font-size: 14px;
+            font-weight: 400;
+            border-top-left-radius: 0.3em;
+            border-top-right-radius: 0.3em;
+            z-index: 0;
+          }
+        `}
+      />
+      <SEO title={thought.title} />
+
       <Header />
 
       <Flex
