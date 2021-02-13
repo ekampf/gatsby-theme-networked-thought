@@ -1,12 +1,32 @@
 export default {
+  useCustomProperties: true,
+  useColorSchemeMediaQuery: true,
   colors: {
     text: "#333",
-    "text-light": "#718096",
+    muted: "#718096",
     background: "#fff",
+    backgroundSecondary: "#fafafc",
     primary: "#3182ce",
     links: "#3182ce",
+    linksHover: "#3182ce",
     gray: "#dadada",
     accent: "#fafafc",
+    accentHover: "#fafafc",
+
+    modes: {
+      dark: {
+        text: "#dcddde",
+        muted: "#999",
+        background: "#202020",
+        backgroundSecondary: "#161616",
+        primary: "#7f6df2",
+        links: "#483699",
+        linksHover: "#4d3ca6",
+        gray: "#dadada",
+        accent: "#7f6df2",
+        accentHover: "#8875ff",
+      },
+    },
   },
   breakpoints: ["640px", "768px", "1024px", "1280px"],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
@@ -34,6 +54,7 @@ export default {
       mx: "-2px",
       borderRadius: 1,
       ":hover": {
+        color: "linksHover",
         bg: "accent",
       },
       ":focus": {
@@ -96,6 +117,7 @@ export default {
       color: "links",
       textDecoration: "none",
       ":hover": {
+        color: "linksHover",
         textDecoration: "underline",
       },
     },

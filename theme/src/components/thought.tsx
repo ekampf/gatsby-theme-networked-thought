@@ -1,7 +1,9 @@
 /** @jsx jsx */
+/** @jsxFrag React.Fragment **/
+import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
-import { useWindowSize } from "react-use";
-import { Box, jsx, Styled, ThemeProvider } from "theme-ui";
+import React from "react";
+import { jsx, Box, Styled, ThemeProvider } from "theme-ui";
 import theme from "../gatsby-plugin-theme-ui";
 import mdxComponents from "./mdx-components";
 import ThoughtFooter from "./thought-footer";
@@ -11,18 +13,19 @@ interface ThoughtProps {
 }
 
 export default function Thought({ thought }: ThoughtProps) {
-  const { width } = useWindowSize();
-  const AnchorTagWithPopups = (props: any) => <mdxComponents.a {...props} stacked={width >= 768} />;
+  const AnchorTagWithPopups = (props: any) => <mdxComponents.a {...props} />;
+  // TODO: add tooltip preview info
   const components = { ...mdxComponents, a: AnchorTagWithPopups };
 
   return (
-    <ThemeProvider theme={theme} components={components}>
+    <MDXProvider components={{ ...components, a: AnchorTagWithPopups }}>
       <Box sx={{ flex: "1" }}>
         <Styled.h1 sx={{ my: 3 }}>{thought.title}</Styled.h1>
+
         <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
       </Box>
       {/* <Footer references={note.inboundReferenceNotes} /> */}
       <ThoughtFooter />
-    </ThemeProvider>
+    </MDXProvider>
   );
 }

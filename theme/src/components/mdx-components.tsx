@@ -2,9 +2,12 @@
 import { Link } from "gatsby";
 import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
+import { useWindowSize } from "react-use";
 import { Styled, jsx } from "theme-ui";
 
-const AnchorTag = ({ href, popups = {}, stacked = false, ...restProps }) => {
+const AnchorTag = ({ href, popups = {}, ...restProps }) => {
+  const { width } = useWindowSize();
+  const stacked = width >= 768;
   if (!href) {
     href = restProps.to;
   }

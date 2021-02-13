@@ -1,7 +1,7 @@
 /** @jsx jsx */
+import { Global, css } from "@emotion/core";
 import { graphql, useStaticQuery } from "gatsby";
 import React, { PropsWithChildren } from "react";
-import { Global, css } from "@emotion/core";
 import {
   LinkToStacked,
   PageIndexProvider,
@@ -9,10 +9,10 @@ import {
   useStackedPagesProvider,
 } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
-import { Box, Flex, jsx } from "theme-ui";
+import { jsx, Box, Flex } from "theme-ui";
 import Header from "./header";
-import Thought from "./thought";
 import SEO from "./seo";
+import Thought from "./thought";
 
 const COL_WIDTH = 576; // w-xl
 
@@ -33,9 +33,9 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
   return (
     <Flex
       as="article"
-      bg={highlighted ? "accent" : "background"}
       px={3}
       sx={{
+        bg: highlighted ? "accent" : "background",
         flexDirection: "column",
         flexShrink: 0,
         overflowY: "auto",

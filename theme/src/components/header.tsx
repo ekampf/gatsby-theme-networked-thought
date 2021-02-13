@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { graphql, Link, useStaticQuery } from "gatsby";
 import React from "react";
-import { jsx, Box } from "theme-ui";
+import { jsx, Box, useColorMode } from "theme-ui";
 
 export default function Header() {
+  const [colorMode, setColorMode] = useColorMode();
   const data = useStaticQuery(graphql`
     query HeaderQuery {
       site {
@@ -20,6 +21,14 @@ export default function Header() {
         <Link to="/" sx={{ fontWeight: "bold", color: "text", textDecoration: "none" }}>
           {data.site.siteMetadata.title}
         </Link>
+        {"  "}
+        <button
+          onClick={(e) => {
+            setColorMode(colorMode === "default" ? "dark" : "default");
+          }}
+        >
+          Toggle {colorMode === "default" ? "Dark" : "Light"}
+        </button>
       </Box>
     </header>
   );
