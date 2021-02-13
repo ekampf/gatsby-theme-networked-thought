@@ -1,22 +1,16 @@
 /** @jsx jsx */
+/* @jsxFrag React.Fragment */
 import { Global, css } from "@emotion/core";
 import React, { PropsWithChildren } from "react";
 import { Helmet } from "react-helmet";
 import { jsx, Flex } from "theme-ui";
-import Footer from "./footer";
 import Header from "./header";
 
 type LayoutProps = {};
 
 export default function Layout({ children }: PropsWithChildren<LayoutProps>) {
   return (
-    <Flex
-      sx={{
-        flexDirection: "column",
-        height: "100vh",
-        minHeight: "100vh",
-      }}
-    >
+    <>
       <Helmet>
         <meta charSet="utf-8" />
       </Helmet>
@@ -44,9 +38,7 @@ export default function Layout({ children }: PropsWithChildren<LayoutProps>) {
           }
         `}
       />
-      <Header />
-      <main>{children}</main>
-      <Footer />
-    </Flex>
+      {children}
+    </>
   );
 }

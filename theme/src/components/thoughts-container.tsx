@@ -10,6 +10,7 @@ import {
 } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Box, Flex, jsx } from "theme-ui";
+import Header from "./header";
 import Thought from "./thought";
 
 const COL_WIDTH = 576; // w-xl
@@ -121,6 +122,7 @@ export default function ThoughtsContainer({
 
   return (
     <Flex
+      as="main"
       sx={{
         flexDirection: "column",
         height: "100vh",
@@ -132,6 +134,8 @@ export default function ThoughtsContainer({
           {data.site.siteMetadata.title} - {thought.title}
         </title>
       </Helmet>
+      <Header />
+
       <Flex
         ref={scrollContainer}
         sx={{
