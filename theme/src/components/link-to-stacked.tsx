@@ -24,8 +24,12 @@ export default const LinkToStacked = React.forwardRef<HTMLAnchorElement, LinkToS
       const isMac = window.navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
       /* Override command + click on MacOS and Ctrl + click on other OS */
-      if ((isMac && ev.metaKey) || (!isMac && ev.ctrlKey)) window.open(to, "_blank");
-      else navigateToStackedPage(to);
+      if ((isMac && ev.metaKey) || (!isMac && ev.ctrlKey)) {
+        window.open(to, "_blank");
+      }
+      else {
+        navigateToStackedPage(to);
+      }
     },
     [navigateToStackedPage, to, onClick],
   );

@@ -12,11 +12,14 @@ export default {
     gray: "#dadada",
     accent: "#fafafc",
     accentHover: "#fafafc",
+    highlightBg: "rgba(255, 255, 0, 0.4)",
+    highlightBgActive: "rgba(255, 128, 0, 0.4)",
 
     modes: {
       dark: {
         text: "#dcddde",
         muted: "#999",
+        faint: "#666",
         background: "#202020",
         backgroundSecondary: "#161616",
         primary: "#7f6df2",

@@ -35,7 +35,7 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
       as="article"
       px={3}
       sx={{
-        bg: highlighted ? "accent" : "background",
+        bg: highlighted ? "backgroundSecondary" : "background",
         flexDirection: "column",
         flexShrink: 0,
         overflowY: "auto",
