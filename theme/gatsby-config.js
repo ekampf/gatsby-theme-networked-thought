@@ -1,6 +1,8 @@
 module.exports = ({ thoughtsDirectory = "content/garden/" }) => ({
   plugins: [
     `gatsby-plugin-theme-ui`,
+    `gatsby-plugin-sharp`,
+    `gatsby-remark-images`,
     {
       resolve: "gatsby-plugin-mdx",
       options: {
@@ -20,8 +22,6 @@ module.exports = ({ thoughtsDirectory = "content/garden/" }) => ({
         ],
       },
     },
-    `gatsby-plugin-sharp`,
-    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
