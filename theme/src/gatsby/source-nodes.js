@@ -220,7 +220,7 @@ function generateThoughts(api, pluginOptions) {
       title: thought.title,
       aliases: thought.aliases,
       content: content,
-      // absolutePath: thought.fullPath,
+      absolutePath: thought.fullPath,
     };
 
     const nodeContent = JSON.stringify(nodeData);

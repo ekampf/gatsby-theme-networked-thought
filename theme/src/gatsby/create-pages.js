@@ -12,6 +12,7 @@ module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
           slug
           aliases
           content
+          absolutePath
         }
       }
     }
@@ -22,13 +23,13 @@ module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
 
   const nodes = (result.data.thoughts || {}).nodes || [];
   nodes.forEach((node) => {
-    const { id, slug, title } = node;
+    const { id, slug, title, absolutePath } = node;
     if (slug == rootThought || title == rootThought) {
       reporter.info(`Creating root ${rootPath} thought page: ${slug}`);
       createPage({
         path: rootPath,
         component: template,
-        context: { id, title, slug },
+        context: { id, title, slug, absolutePath },
       });
     }
 
@@ -36,7 +37,7 @@ module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
     createPage({
       path: slug,
       component: template,
-      context: { id, title, slug },
+      context: { id, title, slug, absolutePath },
     });
   });
 };
