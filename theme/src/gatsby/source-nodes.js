@@ -211,6 +211,8 @@ function generateThoughts(api, pluginOptions) {
   //   });
   // });
 
+  const fileNodes = api.getNodesByType("File");
+
   slugToThoughtMap.forEach((thought, slug) => {
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {
@@ -225,7 +227,7 @@ function generateThoughts(api, pluginOptions) {
 
     const nodeMeta = {
       id: api.createNodeId(`Thought::${slug}`),
-      parent: null,
+      parent: fileNodes.find((fn) => fn.absolutePath == thought.fullPath).id,
       children: [],
       internal: {
         type: `Thought`,

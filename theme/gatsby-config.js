@@ -1,4 +1,4 @@
-module.exports = () => ({
+module.exports = ({ thoughtsDirectory = "content/garden/" }) => ({
   plugins: [
     `gatsby-plugin-theme-ui`,
     {
@@ -12,6 +12,7 @@ module.exports = () => ({
               maxWidth: 800,
             },
           },
+          `gatsby-remark-copy-linked-files`,
           `gatsby-remark-mermaid`,
           `gatsby-remark-code-titles`,
           `gatsby-remark-prismjs`,
@@ -21,5 +22,11 @@ module.exports = () => ({
     },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: thoughtsDirectory,
+      },
+    },
   ],
 });
