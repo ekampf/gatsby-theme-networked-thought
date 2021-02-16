@@ -28,8 +28,6 @@ const AnchorTag = ({ href, popups = {}, ...restProps }) => {
   }
 
   const externalVariant = `links.external-${colorMode}`;
-  console.log("externalVariant", externalVariant);
-
   return <Styled.a {...restProps} href={href} sx={{ variant: externalVariant }} />;
 };
 

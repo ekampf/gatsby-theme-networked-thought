@@ -1,15 +1,3 @@
-function linkify(content, nameToSlugMap, pluginOptions) {
-  // Find matches for content between double brackets
-  // e.g. [[Example]] -> Example
-  const bracketRegexExclusive = /(?<=\[\[).*?(?=\]\])/g;
-
-  // Find matches for content between double brackets including the brackets
-  // e.g. [[Example]] -> [[Example]]
-  const bracketRegexInclusive = /\[\[.*?\]\]/g;
-
-  return processRegExps(bracketRegexInclusive, bracketRegexExclusive, content, nameToSlugMap, pluginOptions);
-}
-
 function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap, pluginOptions) {
   const matches = content.match(regexpInclusive);
   if (matches === null) {
@@ -32,6 +20,18 @@ function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap
     });
 
   return newContent;
+}
+
+function linkify(content, nameToSlugMap, pluginOptions) {
+  // Find matches for content between double brackets
+  // e.g. [[Example]] -> Example
+  const bracketRegexExclusive = /(?<=\[\[).*?(?=\]\])/g;
+
+  // Find matches for content between double brackets including the brackets
+  // e.g. [[Example]] -> [[Example]]
+  const bracketRegexInclusive = /\[\[.*?\]\]/g;
+
+  return processRegExps(bracketRegexInclusive, bracketRegexExclusive, content, nameToSlugMap, pluginOptions);
 }
 
 module.exports = linkify;

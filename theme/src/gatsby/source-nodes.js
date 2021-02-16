@@ -224,8 +224,6 @@ function generateThoughts(api, pluginOptions) {
 
   const fileNodes = api.getNodesByType("File");
 
-  console.log("backlinkMap", backlinkMap);
-
   slugToThoughtMap.forEach((thought, slug) => {
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {

@@ -23,7 +23,7 @@ export default function Header() {
         </Link>
         {"  "}
         <button
-          onClick={(e) => {
+          onClick={() => {
             setColorMode(colorMode === "default" ? "dark" : "default");
           }}
         >

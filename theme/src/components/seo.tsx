@@ -5,8 +5,9 @@ import Helmet from "react-helmet";
 type SEOProps = {
   description?: string;
   lang?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: any;
-  keywords?: any;
+  keywords?: string[];
   title: string;
 };
 

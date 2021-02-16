@@ -1,7 +1,5 @@
 import { graphql, PageProps } from "gatsby";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 import React from "react";
-import Layout from "../components/layout";
 import ThoughtsContainer from "../components/thoughts-container";
 
 export const pageQuery = graphql`

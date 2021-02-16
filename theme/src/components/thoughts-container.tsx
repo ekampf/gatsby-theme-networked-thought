@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { Global, css } from "@emotion/core";
-import { graphql, useStaticQuery } from "gatsby";
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import {
   LinkToStacked,
   PageIndexProvider,
@@ -84,21 +83,7 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
   );
 };
 
-export default function ThoughtsContainer({
-  thought,
-  location,
-  slug,
-  children,
-}: PropsWithChildren<ThoughtsContainerProps>) {
-  const data = useStaticQuery(graphql`
-    query ThoughtsContainerQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
+export default function ThoughtsContainer({ thought, location, slug }: ThoughtsContainerProps) {
   const { width } = useWindowSize();
   const processPageQuery = React.useCallback((x) => x.thought, []);
   const [state, scrollContainer] = useStackedPagesProvider({

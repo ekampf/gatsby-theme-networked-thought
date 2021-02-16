@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import { graphql, useStaticQuery } from "gatsby";
 import React from "react";
-import { jsx, Styled, Box, useColorMode } from "theme-ui";
+import { jsx, Styled, Box } from "theme-ui";
 
 export default function ThoughtFooter() {
-  const [colorMode, setColorMode] = useColorMode();
   const data = useStaticQuery(graphql`
     query ThoughtFooterQuery {
       site {

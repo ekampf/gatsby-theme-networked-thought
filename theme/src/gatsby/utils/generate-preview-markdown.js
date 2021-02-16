@@ -12,7 +12,7 @@ function findDeepestChildForPosition(parent, tree, position) {
     };
   }
 
-  for (child of tree.children) {
+  for (const child of tree.children) {
     if (child.position.start.offset <= position && child.position.end.offset >= position) {
       return findDeepestChildForPosition(
         {
@@ -34,11 +34,9 @@ function textNoEscaping() {
   const Compiler = this.Compiler;
   const visitors = Compiler.prototype.visitors;
 
-  visitors.text = text;
-
-  function text(node, parent) {
+  visitors.text = (node, _parent) => {
     return this.encode(node, node).value;
-  }
+  };
 }
 
 function generatePreviewMarkdown(tree, position) {
