@@ -5,10 +5,11 @@ import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
 import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
-import { Styled, jsx } from "theme-ui";
+import { Styled, jsx, useColorMode } from "theme-ui";
 import Tippy from "./tippy";
 
 const AnchorTag = ({ href, popups = {}, ...restProps }) => {
+  const [colorMode] = useColorMode();
   const { width } = useWindowSize();
   const stacked = width >= 768;
   if (!href) {
@@ -26,7 +27,10 @@ const AnchorTag = ({ href, popups = {}, ...restProps }) => {
     return <Link {...restProps} to={href} sx={{ variant: "links.internal" }} />;
   }
 
-  return <Styled.a {...restProps} href={href} />;
+  const externalVariant = `links.external-${colorMode}`;
+  console.log("externalVariant", externalVariant);
+
+  return <Styled.a {...restProps} href={href} sx={{ variant: externalVariant }} />;
 };
 
 type ImageProps = { src: string } & GatsbyImageOptionalProps;

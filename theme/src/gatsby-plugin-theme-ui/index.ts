@@ -1,3 +1,6 @@
+import externalLinkImageLight from './external-link-light.svg';
+import externalLinkImageDark from './external-link-dark.svg';
+
 export default {
   useCustomProperties: true,
   useColorSchemeMediaQuery: true,
@@ -64,6 +67,24 @@ export default {
         bg: "accent",
       },
     },
+    "external-default": {
+      backgroundPosition: "center right",
+      backgroundRepeat: "no-repeat",
+      backgroundImage: `linear-gradient(transparent, transparent), url(${externalLinkImageLight});`,
+      backgroundSize: "13px",
+      paddingRight: "16px",
+      backgroundPositionY: "4px",
+      fontStyle: "italic"
+    },
+    "external-dark": {
+      backgroundPosition: "center right",
+      backgroundRepeat: "no-repeat",
+      backgroundImage: `linear-gradient(transparent, transparent), url(${externalLinkImageDark});`,
+      backgroundSize: "13px",
+      paddingRight: "16px",
+      backgroundPositionY: "4px",
+      fontStyle: "italic"
+    }
   },
   styles: {
     root: {
