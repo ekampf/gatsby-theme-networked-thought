@@ -216,34 +216,36 @@ function generateThoughts(api, pluginOptions) {
     });
   });
 
-  //   const { source, sourceInnerReferences } = reference;
-  //   if (sourceInnerReferences === null) {
-  //     return;
-  //   }
-
-  //   sourceInnerReferences.forEach((innerRef) => {
-  //     const { text } = innerRef;
-  //     const textLower = text.toLowerCase();
-  //     const textLowerSlugified = pluginOptions.generateSlug(textLower);
-
-  //     if (nameToSlugMap[lower] == null) {
-  //     }
-  //   });
-  // });
+  // Create nodes
 
   const fileNodes = api.getNodesByType("File");
 
+  console.log("backlinkMap", backlinkMap);
+
   slugToThoughtMap.forEach((thought, slug) => {
+    console.log(`Creating node for ${slug}: `, thought);
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {
       slug,
       title: thought.title,
       aliases: thought.aliases,
       content: content,
+      rawContent: content,
       absolutePath: thought.fullPath,
       birthtime: thought.birthtime,
       mtime: thought.mtime,
     };
+
+    const outboundReferences = thought.references;
+    // Use the slug for easier use in queries
+    let outboundReferenceSlugs = outboundReferences.map((match) => nameToSlugMap.get(match.text.toLowerCase()));
+    nodeData.outboundReferenceSlugs = outboundReferenceSlugs;
+    console.log("outboundReferenceSlugs", nodeData.outboundReferenceSlugs);
+
+    let inboundReferences = backlinkMap.get(slug) || [];
+    let inboundReferenceSlugs = inboundReferences.map(({ source }) => source);
+    nodeData.inboundReferenceSlugs = inboundReferenceSlugs.filter((a, b) => inboundReferenceSlugs.indexOf(a) === b);
+    console.log("inboundReferences", nodeData.inboundReferenceSlugs);
 
     const nodeContent = JSON.stringify(nodeData);
 

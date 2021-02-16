@@ -9,6 +9,8 @@ module.exports = ({ actions, reporter }) => {
       absolutePath: String!
       birthtime: Date! @dateformat
       mtime: Date! @dateformat
+      outboundReferenceSlugs: [String!]
+      inboundReferenceSlugs: [String!]
     }
   `;
 
