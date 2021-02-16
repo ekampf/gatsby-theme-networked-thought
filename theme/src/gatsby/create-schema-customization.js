@@ -9,13 +9,18 @@ module.exports = ({ actions, reporter }) => {
       absolutePath: String!
       birthtime: Date! @dateformat
       mtime: Date! @dateformat
-      outboundReferenceSlugs: [String!]
-      outboundReferenceThoughts: [Thought] @link(from: "outboundReferenceThoughtsIds")
-      inboundReferenceSlugs: [String!]
-      inboundReferenceThoughts: [Thought] @link(from: "inboundReferenceThoughtsIds")
+      outboundReferences: [ThoughtReference!]
+      inboundReferences: [ThoughtReference!]
+    }
+
+    type ThoughtReference @infer {
+      slug: String!
+      previewMarkdown: String!
+      previewHtml: String!
+      thought: Thought! @link(from: "thoughtId")
     }
   `;
 
-  reporter.info("Digital Garden: setting up schema");
+  reporter.info("Digital Garden: setting up schema...");
   createTypes(typeDefs);
 };

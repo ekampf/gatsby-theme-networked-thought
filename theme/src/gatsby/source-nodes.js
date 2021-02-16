@@ -240,17 +240,29 @@ function generateThoughts(api, pluginOptions) {
     };
 
     const outboundReferences = thought.references;
-    // Use the slug for easier use in queries
-    let outboundReferenceSlugs = outboundReferences
-      .map((match) => nameToSlugMap.get(match.text.toLowerCase()))
-      .filter((slug) => slug !== undefined);
-    nodeData.outboundReferenceSlugs = outboundReferenceSlugs;
-    nodeData.outboundReferenceThoughtsIds = outboundReferenceSlugs.map((slug) => getThoughtId(slug, api.createNodeId));
+    nodeData.outboundReferences = outboundReferences
+      .map(({ text, previewMarkdown }) => {
+        const slug = nameToSlugMap.get(text.toLowerCase());
+        if (slug === undefined) {
+          return null;
+        }
 
-    let inboundReferences = backlinkMap.get(slug) || [];
-    let inboundReferenceSlugs = inboundReferences.map(({ source }) => source);
-    nodeData.inboundReferenceSlugs = inboundReferenceSlugs.filter((a, b) => inboundReferenceSlugs.indexOf(a) === b);
-    nodeData.inboundReferenceThoughtsIds = inboundReferenceSlugs.map((slug) => getThoughtId(slug, api.createNodeId));
+        return {
+          slug,
+          thoughtId: getThoughtId(slug, api.createNodeId),
+          previewMarkdown,
+        };
+      })
+      .filter((x) => x != null);
+
+    const inboundReferences = backlinkMap.get(slug) || [];
+    nodeData.inboundReferences = inboundReferences.map(({ source, previewMarkdown }) => {
+      return {
+        slug: source,
+        thoughtId: getThoughtId(source, api.createNodeId),
+        previewMarkdown,
+      };
+    });
 
     const nodeContent = JSON.stringify(nodeData);
 
