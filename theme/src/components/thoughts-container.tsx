@@ -15,20 +15,25 @@ import Thought from "./thought";
 
 const COL_WIDTH = 576; // w-xl
 
-interface ThoughtsContainerProps {
-  thought: any;
-  location: any;
+interface StackedPageWrapperProps {
   slug: string;
+  title: string;
+  overlay: boolean;
+  obstructed: boolean;
+  highlighted: boolean;
+  index: number;
 }
 
-const StackedPageWrapper = ({ index, ...rest }) => (
+const StackedPageWrapper = ({ index, ...rest }: StackedPageWrapperProps) => (
   <PageIndexProvider value={index}>
     <NoteWrapper {...rest} index={index} />
   </PageIndexProvider>
 );
 
 // A wrapper component to render the content of a page when stacked
-const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, index }) => {
+type NoteWrapperProps = React.PropsWithChildren<StackedPageWrapperProps>;
+
+const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, index }: NoteWrapperProps) => {
   return (
     <Flex
       as="article"
@@ -50,7 +55,7 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
         sx={{
           display: ["none", "none", "block"],
           transition: "opacity",
-          transitionDuration: 100,
+          transitionDuration: "100",
           opacity: obstructed ? 1 : 0,
         }}
       >
@@ -73,7 +78,7 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
           flexDirection: "column",
           minHeight: "100%",
           transition: "opacity",
-          transitionDuration: 100,
+          transitionDuration: "100",
           opacity: obstructed ? 0 : 1,
         }}
       >
@@ -82,6 +87,12 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
     </Flex>
   );
 };
+
+interface ThoughtsContainerProps {
+  thought: any;
+  location: any;
+  slug: string;
+}
 
 export default function ThoughtsContainer({ thought, location, slug }: ThoughtsContainerProps) {
   const { width } = useWindowSize();
@@ -95,7 +106,7 @@ export default function ThoughtsContainer({ thought, location, slug }: ThoughtsC
   const { stackedPages, stackedPageStates } = state;
 
   let pages = stackedPages;
-  let indexToShow: int;
+  let indexToShow: number;
   if (width < 768) {
     const activeSlug = Object.keys(state.stackedPageStates).find((slug) => state.stackedPageStates[slug].active);
     indexToShow = state.stackedPages.findIndex((page) => page.slug === activeSlug);

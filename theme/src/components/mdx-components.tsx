@@ -2,18 +2,21 @@
 import { Link } from "gatsby";
 import { graphql, useStaticQuery } from "gatsby";
 import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
+import _ from "lodash";
 import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";
 import Tippy from "./tippy";
 
-const AnchorTag = ({ href, popups = {}, ...restProps }) => {
+type AnchorTagProps = { href: string; to?: string };
+
+const AnchorTag = ({ href, ...restProps }: AnchorTagProps) => {
   const [colorMode] = useColorMode();
   const { width } = useWindowSize();
   const stacked = width >= 768;
   if (!href) {
-    href = restProps.to;
+    href = restProps.to as string;
   }
 
   if (!href.match(/^http/)) {
@@ -52,11 +55,12 @@ function Image(props: ImageProps) {
   `);
 
   if (src.match(/^http/)) {
-    return <img src={src} {...rest} />;
+    const imageProps = _.pick(rest, ["title", "alt", "className", "style"]);
+    return <img src={src} {..._.pickBy(imageProps, _.identity)} />;
   }
 
-  const image = data.images.nodes.find((n) => {
-    return n.relativePath.includes(src);
+  const image = data.images.nodes.find(({ relativePath }: { relativePath: string }) => {
+    return relativePath.includes(src);
   });
   if (!image) {
     return null;
