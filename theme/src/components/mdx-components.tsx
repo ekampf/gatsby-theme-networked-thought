@@ -4,6 +4,8 @@ import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx } from "theme-ui";
+import { graphql, useStaticQuery } from "gatsby";
+import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
 import Tippy from "./tippy";
 
 const AnchorTag = ({ href, popups = {}, ...restProps }) => {
@@ -27,6 +29,43 @@ const AnchorTag = ({ href, popups = {}, ...restProps }) => {
   return <Styled.a {...restProps} href={href} />;
 };
 
+type ImageProps = { src: string } & GatsbyImageOptionalProps;
+
+function Image(props: ImageProps) {
+  console.log("Image: ", props);
+  const { src, ...rest } = props;
+  const data = useStaticQuery(graphql`
+    query ImageComponent {
+      images: allFile {
+        nodes {
+          relativePath
+          name
+          childImageSharp {
+            fluid(maxWidth: 1800) {
+              ...GatsbyImageSharpFluid_tracedSVG
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  if (src.match(/^http/)) {
+    return <img src={src} {...rest} />;
+  }
+
+  const image = data.images.nodes.find((n) => {
+    return n.relativePath.includes(src);
+  });
+  if (!image) {
+    return null;
+  }
+
+  const fluid = image.childImageSharp?.fluid as FluidObject;
+  return <Img loading="lazy" fadeIn={true} fluid={fluid} {...rest} />;
+}
+
 export default {
   a: AnchorTag,
+  img: Image,
 };
