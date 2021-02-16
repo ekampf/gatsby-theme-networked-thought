@@ -10,7 +10,9 @@ module.exports = ({ actions, reporter }) => {
       birthtime: Date! @dateformat
       mtime: Date! @dateformat
       outboundReferenceSlugs: [String!]
+      outboundReferenceThoughts: [Thought] @link(from: "outboundReferenceThoughtsIds")
       inboundReferenceSlugs: [String!]
+      inboundReferenceThoughts: [Thought] @link(from: "inboundReferenceThoughtsIds")
     }
   `;
 

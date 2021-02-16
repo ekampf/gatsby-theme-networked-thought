@@ -189,6 +189,10 @@ function getMarkdownThoughts({ thoughtsDirectory, generateSlug }) {
     });
 }
 
+function getThoughtId(slug, createNodeId) {
+  return createNodeId(`Thought::${slug}`);
+}
+
 function generateThoughts(api, pluginOptions) {
   const { actions } = api;
   const { reporter } = api;
@@ -223,7 +227,6 @@ function generateThoughts(api, pluginOptions) {
   console.log("backlinkMap", backlinkMap);
 
   slugToThoughtMap.forEach((thought, slug) => {
-    console.log(`Creating node for ${slug}: `, thought);
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {
       slug,
@@ -236,21 +239,25 @@ function generateThoughts(api, pluginOptions) {
       mtime: thought.mtime,
     };
 
+    console.log(slug);
+
     const outboundReferences = thought.references;
     // Use the slug for easier use in queries
-    let outboundReferenceSlugs = outboundReferences.map((match) => nameToSlugMap.get(match.text.toLowerCase()));
+    let outboundReferenceSlugs = outboundReferences
+      .map((match) => nameToSlugMap.get(match.text.toLowerCase()))
+      .filter((slug) => slug !== undefined);
     nodeData.outboundReferenceSlugs = outboundReferenceSlugs;
-    console.log("outboundReferenceSlugs", nodeData.outboundReferenceSlugs);
+    nodeData.outboundReferenceThoughtsIds = outboundReferenceSlugs.map((slug) => getThoughtId(slug, api.createNodeId));
 
     let inboundReferences = backlinkMap.get(slug) || [];
     let inboundReferenceSlugs = inboundReferences.map(({ source }) => source);
     nodeData.inboundReferenceSlugs = inboundReferenceSlugs.filter((a, b) => inboundReferenceSlugs.indexOf(a) === b);
-    console.log("inboundReferences", nodeData.inboundReferenceSlugs);
+    nodeData.inboundReferenceThoughtsIds = inboundReferenceSlugs.map((slug) => getThoughtId(slug, api.createNodeId));
 
     const nodeContent = JSON.stringify(nodeData);
 
     const nodeMeta = {
-      id: api.createNodeId(`Thought::${slug}`),
+      id: getThoughtId(slug, api.createNodeId),
       parent: fileNodes.find((fn) => fn.absolutePath == thought.fullPath).id,
       children: [],
       internal: {
