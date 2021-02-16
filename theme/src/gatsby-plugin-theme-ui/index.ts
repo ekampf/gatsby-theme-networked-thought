@@ -59,6 +59,8 @@ export default {
       px: "2px",
       mx: "-2px",
       borderRadius: 1,
+      cursor: "pointer",
+      textDecoration: "none",
       ":hover": {
         color: "linksHover",
         bg: "accent",
@@ -68,6 +70,7 @@ export default {
       },
     },
     "external-default": {
+      cursor: "pointer",
       backgroundPosition: "center right",
       backgroundRepeat: "no-repeat",
       backgroundImage: `linear-gradient(transparent, transparent), url(${externalLinkImageLight});`,
@@ -77,6 +80,7 @@ export default {
       fontStyle: "italic"
     },
     "external-dark": {
+      cursor: "pointer",
       backgroundPosition: "center right",
       backgroundRepeat: "no-repeat",
       backgroundImage: `linear-gradient(transparent, transparent), url(${externalLinkImageDark});`,
