@@ -42,7 +42,7 @@ function Image(props: ImageProps) {
           name
           childImageSharp {
             fluid(maxWidth: 1800) {
-              ...GatsbyImageSharpFluid_tracedSVG
+              ...GatsbyImageSharpFluid_withWebp_tracedSVG
             }
           }
         }
