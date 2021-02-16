@@ -12,6 +12,8 @@ export const pageQuery = graphql`
       aliases
       content
       id
+      mtime
+      mtimeFmt: mtime(formatString: "DD, MMMM YYYY")
       childMdx {
         body
       }
@@ -34,10 +36,5 @@ export default function ThoughtTemplate(props: ThoughtTemplateProps) {
     data: { thought },
     pageContext: { slug },
   } = props;
-  return (
-    <ThoughtsContainer thought={thought} location={location} slug={slug}>
-      <h1>{thought.title}</h1>
-      <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
-    </ThoughtsContainer>
-  );
+  return <ThoughtsContainer thought={thought} location={location} slug={slug} />;
 }

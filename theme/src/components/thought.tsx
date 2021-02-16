@@ -21,6 +21,9 @@ export default function Thought({ thought }: ThoughtProps) {
     <MDXProvider components={{ ...components, a: AnchorTagWithPopups }}>
       <Box sx={{ flex: "1" }}>
         <Styled.h1 sx={{ my: 3 }}>{thought.title}</Styled.h1>
+        <span sx={{ fontSize: 0, color: "muted" }}>
+          Last updated on <time dateTime={thought.mtime}>{thought.mtimeFmt}</time>
+        </span>
 
         <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
       </Box>

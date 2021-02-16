@@ -252,7 +252,7 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
   const nameToSlugMap = new Map();
   const allReferences = [];
 
-  markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent }) => {
+  markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent, birthtime, mtime }) => {
     reporter.info(`processing thought ${filename}`);
     const { content, data: frontmatter, excerpt } = matter(rawContent);
     const tree = unified().use(markdown).parse(content);
@@ -300,6 +300,8 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
       content: content,
       rawContent: rawContent,
       fullPath: fullPath,
+      birthtime,
+      mtime,
       frontmatter,
       aliases,
       references,
