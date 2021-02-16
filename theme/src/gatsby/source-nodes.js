@@ -175,7 +175,10 @@ function getMarkdownThoughts({ thoughtsDirectory, generateSlug }) {
       const slug = generateSlug(noteName);
       const fullPath = thoughtsDirectory + filename;
       const rawContent = fs.readFileSync(fullPath, "utf-8");
+      const { birthtime, mtime } = fs.statSync(fullPath);
       return {
+        birthtime,
+        mtime,
         filename,
         fullPath,
         slug,
@@ -188,8 +191,8 @@ function getMarkdownThoughts({ thoughtsDirectory, generateSlug }) {
 function generateThoughts(api, pluginOptions) {
   const { actions } = api;
   const { reporter } = api;
-  let markdownThoughts = getMarkdownThoughts(pluginOptions);
-  let { slugToThoughtMap, nameToSlugMap, allReferences } = processMarkdownThoughts(
+  const markdownThoughts = getMarkdownThoughts(pluginOptions);
+  const { slugToThoughtMap, nameToSlugMap, allReferences } = processMarkdownThoughts(
     markdownThoughts,
     pluginOptions,
     reporter,
@@ -221,6 +224,8 @@ function generateThoughts(api, pluginOptions) {
       aliases: thought.aliases,
       content: content,
       absolutePath: thought.fullPath,
+      birthtime: thought.birthtime,
+      mtime: thought.mtime,
     };
 
     const nodeContent = JSON.stringify(nodeData);
@@ -245,12 +250,12 @@ function generateThoughts(api, pluginOptions) {
 function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
   const slugToThoughtMap = new Map();
   const nameToSlugMap = new Map();
-  let allReferences = [];
+  const allReferences = [];
 
   markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent }) => {
     reporter.info(`processing thought ${filename}`);
     const { content, data: frontmatter, excerpt } = matter(rawContent);
-    let tree = unified().use(markdown).parse(content);
+    const tree = unified().use(markdown).parse(content);
 
     nameToSlugMap.set(slug, slug);
     nameToSlugMap.set(name.toLowerCase(), slug);
@@ -271,10 +276,10 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
     const references = [];
 
     const regex = /(?<=\[\[).*?(?=\]\])/g;
-    let referencesMatches = [...content.matchAll(regex)] || [];
+    const referencesMatches = [...content.matchAll(regex)] || [];
     referencesMatches.forEach((match) => {
       const text = match[0];
-      let start = match.index;
+      const start = match.index;
 
       references.push({
         text: text,

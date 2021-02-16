@@ -7,6 +7,8 @@ module.exports = ({ actions, reporter }) => {
       slug: String!
       aliases: [String]
       absolutePath: String!
+      birthtime: Date! @dateformat
+      mtime: Date! @dateformat
     }
   `;
 
