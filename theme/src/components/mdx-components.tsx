@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { Link } from "gatsby";
+import { graphql, useStaticQuery } from "gatsby";
+import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
 import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx } from "theme-ui";
-import { graphql, useStaticQuery } from "gatsby";
-import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
 import Tippy from "./tippy";
 
 const AnchorTag = ({ href, popups = {}, ...restProps }) => {
@@ -32,7 +32,6 @@ const AnchorTag = ({ href, popups = {}, ...restProps }) => {
 type ImageProps = { src: string } & GatsbyImageOptionalProps;
 
 function Image(props: ImageProps) {
-  console.log("Image: ", props);
   const { src, ...rest } = props;
   const data = useStaticQuery(graphql`
     query ImageComponent {
