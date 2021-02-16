@@ -198,7 +198,27 @@ function generateThoughts(api, pluginOptions) {
     reporter,
   );
 
-  // allReferences.forEach((reference) => {
+  console.log(util.inspect(allReferences, false, null, true));
+
+  // Calculate backlinks for every slug
+  let backlinkMap = new Map();
+  allReferences.forEach(({ source, references }) => {
+    references.forEach((ref) => {
+      const { text, previewMarkdown } = ref;
+      const textLower = text.toLowerCase();
+      const textLowerSlugified = pluginOptions.generateSlug(textLower);
+
+      let backlinks = backlinkMap.get(textLowerSlugified) || [];
+      backlinks.push({
+        source: source,
+        previewMarkdown: previewMarkdown,
+      });
+      backlinkMap.set(textLowerSlugified, backlinks);
+    });
+  });
+
+  console.log(util.inspect(backlinkMap, false, null, true));
+
   //   const { source, sourceInnerReferences } = reference;
   //   if (sourceInnerReferences === null) {
   //     return;
