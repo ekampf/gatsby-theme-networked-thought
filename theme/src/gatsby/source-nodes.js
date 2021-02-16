@@ -204,14 +204,14 @@ function generateThoughts(api, pluginOptions) {
   );
 
   // Calculate backlinks for every slug
-  let backlinkMap = new Map();
+  const backlinkMap = new Map();
   allReferences.forEach(({ source, references }) => {
     references.forEach((ref) => {
       const { text, previewMarkdown } = ref;
       const textLower = text.toLowerCase();
       const textLowerSlugified = pluginOptions.generateSlug(textLower);
 
-      let backlinks = backlinkMap.get(textLowerSlugified) || [];
+      const backlinks = backlinkMap.get(textLowerSlugified) || [];
       backlinks.push({
         source: source,
         previewMarkdown: previewMarkdown,
@@ -247,7 +247,7 @@ function generateThoughts(api, pluginOptions) {
           return null;
         }
 
-        let linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
+        const linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
 
         const previewHtml = generatePreviewHtml(linkifiedMarkdown);
 
@@ -262,7 +262,7 @@ function generateThoughts(api, pluginOptions) {
 
     const inboundReferences = backlinkMap.get(slug) || [];
     nodeData.inboundReferences = inboundReferences.map(({ source, previewMarkdown }) => {
-      let linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
+      const linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
 
       const previewHtml = generatePreviewHtml(linkifiedMarkdown);
       return {

@@ -1,5 +1,5 @@
-import externalLinkImageLight from './external-link-light.svg';
-import externalLinkImageDark from './external-link-dark.svg';
+import externalLinkImageDark from "./external-link-dark.svg";
+import externalLinkImageLight from "./external-link-light.svg";
 
 export default {
   useCustomProperties: true,
@@ -77,7 +77,7 @@ export default {
       backgroundSize: "13px",
       paddingRight: "16px",
       backgroundPositionY: "4px",
-      fontStyle: "italic"
+      fontStyle: "italic",
     },
     "external-dark": {
       cursor: "pointer",
@@ -87,8 +87,8 @@ export default {
       backgroundSize: "13px",
       paddingRight: "16px",
       backgroundPositionY: "4px",
-      fontStyle: "italic"
-    }
+      fontStyle: "italic",
+    },
   },
   styles: {
     root: {

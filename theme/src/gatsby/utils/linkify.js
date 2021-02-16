@@ -22,7 +22,7 @@ function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap
     .filter((a, b) => matches.indexOf(a) === b)
     .forEach((match) => {
       const text = match.match(regexpExclusive)[0];
-      let name = text.toLowerCase();
+      const name = text.toLowerCase();
       if (nameToSlugMap.has(name)) {
         const link = nameToSlugMap.get(name);
         const linkPath = rootPath + link;

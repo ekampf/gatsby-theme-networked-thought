@@ -1,8 +1,8 @@
-const unified = require("unified");
-const stringifyMd = require("remark-stringify");
+const html = require("rehype-stringify");
 const markdown = require("remark-parse");
 const remark2rehype = require("remark-rehype");
-const html = require("rehype-stringify");
+const stringifyMd = require("remark-stringify");
+const unified = require("unified");
 
 function findDeepestChildForPosition(parent, tree, position) {
   if (!tree.children || tree.children.length == 0) {
@@ -31,8 +31,8 @@ function findDeepestChildForPosition(parent, tree, position) {
 }
 
 function textNoEscaping() {
-  var Compiler = this.Compiler;
-  var visitors = Compiler.prototype.visitors;
+  const Compiler = this.Compiler;
+  const visitors = Compiler.prototype.visitors;
 
   visitors.text = text;
 

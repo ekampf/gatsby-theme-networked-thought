@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui";
-import React from "react";
 import Tippy from "@tippyjs/react";
+import React from "react";
+import { jsx } from "theme-ui";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light-border.css";
 import "tippy.js/animations/shift-away-extreme.css";
