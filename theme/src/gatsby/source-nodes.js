@@ -9,7 +9,7 @@ const markdown = require(`remark-parse`);
 const util = require(`util`);
 
 const linkify = require(`./utils/linkify`);
-const generatePreviewMarkdown = require(`./utils/generate-preview-markdown`);
+const { generatePreviewMarkdown, generatePreviewHtml } = require(`./utils/generate-preview-markdown`);
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
@@ -247,20 +247,29 @@ function generateThoughts(api, pluginOptions) {
           return null;
         }
 
+        let linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
+
+        const previewHtml = generatePreviewHtml(linkifiedMarkdown);
+
         return {
           slug,
           thoughtId: getThoughtId(slug, api.createNodeId),
-          previewMarkdown,
+          previewMarkdown: linkifiedMarkdown,
+          previewHtml,
         };
       })
       .filter((x) => x != null);
 
     const inboundReferences = backlinkMap.get(slug) || [];
     nodeData.inboundReferences = inboundReferences.map(({ source, previewMarkdown }) => {
+      let linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
+
+      const previewHtml = generatePreviewHtml(linkifiedMarkdown);
       return {
         slug: source,
         thoughtId: getThoughtId(source, api.createNodeId),
-        previewMarkdown,
+        previewMarkdown: linkifiedMarkdown,
+        previewHtml,
       };
     });
 

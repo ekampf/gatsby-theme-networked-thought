@@ -1,5 +1,8 @@
 const unified = require("unified");
 const stringifyMd = require("remark-stringify");
+const markdown = require("remark-parse");
+const remark2rehype = require("remark-rehype");
+const html = require("rehype-stringify");
 
 function findDeepestChildForPosition(parent, tree, position) {
   if (!tree.children || tree.children.length == 0) {
@@ -43,13 +46,24 @@ function generatePreviewMarkdown(tree, position) {
 
   // Adding this logic to avoid including too large an amount of content. May need additional heuristics to improve this
   // Right now it essentially will just capture the bullet point or paragraph where it is mentioned.
-  let maxDepth = 2;
+  const maxDepth = 2;
   for (let i = 0; i < maxDepth && parent.parent != null && parent.parent.node.type !== "root"; i++) {
     parent = parent.parent;
   }
 
-  let processor = unified().use(stringifyMd, { commonmark: true }).use(textNoEscaping).freeze();
+  const processor = unified().use(stringifyMd, { commonmark: true }).use(textNoEscaping).freeze();
   return processor.stringify(parent.node);
 }
 
-module.exports = generatePreviewMarkdown;
+function generatePreviewHtml(markdownText) {
+  const previewHtml = unified()
+    .use(markdown, { gfm: true, commonmark: true, pedantic: true })
+    .use(remark2rehype)
+    .use(html)
+    .processSync(markdownText)
+    .toString();
+
+  return previewHtml;
+}
+
+module.exports = { generatePreviewMarkdown, generatePreviewHtml };
