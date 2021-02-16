@@ -9,6 +9,7 @@ const markdown = require(`remark-parse`);
 const util = require(`util`);
 
 const linkify = require(`./utils/linkify`);
+const generatePreviewMarkdown = require(`./utils/generate-preview-markdown`);
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
@@ -198,8 +199,6 @@ function generateThoughts(api, pluginOptions) {
     reporter,
   );
 
-  console.log(util.inspect(allReferences, false, null, true));
-
   // Calculate backlinks for every slug
   let backlinkMap = new Map();
   allReferences.forEach(({ source, references }) => {
@@ -216,8 +215,6 @@ function generateThoughts(api, pluginOptions) {
       backlinkMap.set(textLowerSlugified, backlinks);
     });
   });
-
-  console.log(util.inspect(backlinkMap, false, null, true));
 
   //   const { source, sourceInnerReferences } = reference;
   //   if (sourceInnerReferences === null) {
@@ -301,8 +298,12 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
       const text = match[0];
       const start = match.index;
 
+      // TODO: generate previewMarkdown
+      const previewMarkdown = generatePreviewMarkdown(tree, start);
+
       references.push({
-        text: text,
+        text,
+        previewMarkdown,
       });
     });
 
