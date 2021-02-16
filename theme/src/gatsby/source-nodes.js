@@ -239,8 +239,6 @@ function generateThoughts(api, pluginOptions) {
       mtime: thought.mtime,
     };
 
-    console.log(slug);
-
     const outboundReferences = thought.references;
     // Use the slug for easier use in queries
     let outboundReferenceSlugs = outboundReferences
