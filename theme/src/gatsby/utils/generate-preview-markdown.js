@@ -34,9 +34,11 @@ function textNoEscaping() {
   const Compiler = this.Compiler;
   const visitors = Compiler.prototype.visitors;
 
-  visitors.text = (node, _parent) => {
+  function f(node, _parent) {
     return this.encode(node, node).value;
-  };
+  }
+
+  visitors.text = f;
 }
 
 function generatePreviewMarkdown(tree, position) {
