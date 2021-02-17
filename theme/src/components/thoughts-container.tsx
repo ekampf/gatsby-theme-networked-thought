@@ -3,6 +3,7 @@ import { Global, css } from "@emotion/core";
 import React from "react";
 import {
   LinkToStacked,
+  ScrollState,
   PageIndexProvider,
   StackedPagesProvider,
   useStackedPagesProvider,
@@ -24,7 +25,7 @@ interface StackedPageWrapperProps {
   index: number;
 }
 
-const StackedPageWrapper = ({ index, ...rest }: StackedPageWrapperProps) => (
+const StackedPageWrapper = ({ index, ...rest }: React.PropsWithChildren<StackedPageWrapperProps>) => (
   <PageIndexProvider value={index}>
     <NoteWrapper {...rest} index={index} />
   </PageIndexProvider>
@@ -89,7 +90,9 @@ const NoteWrapper = ({ children, slug, title, overlay, obstructed, highlighted, 
 };
 
 interface ThoughtsContainerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thought: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: any;
   slug: string;
 }
@@ -103,17 +106,25 @@ export default function ThoughtsContainer({ thought, location, slug }: ThoughtsC
     processPageQuery,
     pageWidth: COL_WIDTH,
   });
-  const { stackedPages, stackedPageStates } = state;
+
+  const { stackedPages, stackedPageStates } = state as {
+    stackedPages: {
+      slug: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data: any;
+    }[];
+    stackedPageStates: ScrollState;
+  };
 
   let pages = stackedPages;
   let indexToShow: number;
   if (width < 768) {
-    const activeSlug = Object.keys(state.stackedPageStates).find((slug) => state.stackedPageStates[slug].active);
-    indexToShow = state.stackedPages.findIndex((page) => page.slug === activeSlug);
+    const activeSlug = Object.keys(stackedPageStates).find((slug) => stackedPageStates[slug].active);
+    indexToShow = stackedPages.findIndex((page) => page.slug === activeSlug);
     if (indexToShow === -1) {
-      indexToShow = state.stackedPages.length - 1;
+      indexToShow = stackedPages.length - 1;
     }
-    pages = [state.stackedPages[indexToShow]];
+    pages = [stackedPages[indexToShow]];
   }
 
   return (
@@ -168,29 +179,30 @@ export default function ThoughtsContainer({ thought, location, slug }: ThoughtsC
             minWidth: "unset",
             flexGrow: 1,
             transition: [null, null, "width"],
-            transitionDuration: 100,
+            transitionDuration: "100",
             width: ["100%", "100%", COL_WIDTH * (pages.length + 1)],
           }}
         >
           <StackedPagesProvider value={state}>
             {/* Render the stacked pages */}
-            {pages.map((page, i) => (
-              <StackedPageWrapper
-                index={i}
-                key={page.slug}
-                slug={page.slug}
-                title={page.data.title}
-                overlay={stackedPageStates[page.slug] && stackedPageStates[page.slug].overlay}
-                obstructed={
-                  indexToShow !== undefined
-                    ? false
-                    : stackedPageStates[page.slug] && stackedPageStates[page.slug].obstructed
-                }
-                highlighted={stackedPageStates[page.slug] && stackedPageStates[page.slug].highlighted}
-              >
-                <Thought thought={page.data} />
-              </StackedPageWrapper>
-            ))}
+            {pages &&
+              pages.map((page, i) => (
+                <StackedPageWrapper
+                  index={i}
+                  key={page.slug}
+                  slug={page.slug}
+                  title={page.data.title}
+                  overlay={stackedPageStates[page.slug] && stackedPageStates[page.slug].overlay}
+                  obstructed={
+                    indexToShow !== undefined
+                      ? false
+                      : stackedPageStates[page.slug] && stackedPageStates[page.slug].obstructed
+                  }
+                  highlighted={stackedPageStates[page.slug] && stackedPageStates[page.slug].highlighted}
+                >
+                  <Thought thought={page.data} />
+                </StackedPageWrapper>
+              ))}
           </StackedPagesProvider>
         </Flex>
       </Flex>

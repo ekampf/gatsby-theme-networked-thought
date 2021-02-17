@@ -21,6 +21,7 @@ export const pageQuery = graphql`
 
 interface ThoughtTemplateProps extends PageProps {
   data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     thought: any;
   };
   pageContext: {
