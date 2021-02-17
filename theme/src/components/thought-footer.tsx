@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { graphql, useStaticQuery } from "gatsby";
-import React from "react";
 import { jsx, Styled, Box } from "theme-ui";
 
 export default function ThoughtFooter() {

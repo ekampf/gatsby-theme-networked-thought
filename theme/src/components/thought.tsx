@@ -2,7 +2,6 @@
 /** @jsxFrag React.Fragment **/
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
-import React from "react";
 import { jsx, Box, Styled } from "theme-ui";
 import mdxComponents from "./mdx-components";
 import ThoughtFooter from "./thought-footer";

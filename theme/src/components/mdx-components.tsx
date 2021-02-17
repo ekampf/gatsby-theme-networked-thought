@@ -1,9 +1,7 @@
 /** @jsx jsx */
-import { Link } from "gatsby";
-import { graphql, useStaticQuery } from "gatsby";
+import { Link, graphql, useStaticQuery } from "gatsby";
 import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
 import _ from "lodash";
-import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";

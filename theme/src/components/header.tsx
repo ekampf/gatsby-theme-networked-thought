@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { graphql, Link, useStaticQuery } from "gatsby";
-import React from "react";
 import { jsx, Box, useColorMode } from "theme-ui";
 
 export default function Header() {
