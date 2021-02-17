@@ -3,15 +3,18 @@
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { jsx, Box, Styled } from "theme-ui";
-import mdxComponents from "./mdx-components";
+import mdxComponents, { AnchorTagProps } from "./mdx-components";
 import ThoughtFooter from "./thought-footer";
 
 interface ThoughtProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thought: any;
 }
 
 export default function Thought({ thought }: ThoughtProps) {
-  const AnchorTagWithPopups = (props: any) => <mdxComponents.a {...props} />;
+  const AnchorTagWithPopups = (props: AnchorTagProps) => {
+    return <mdxComponents.a {...props} />;
+  };
   // TODO: add tooltip preview info
   const components = { ...mdxComponents, a: AnchorTagWithPopups };
 

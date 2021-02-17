@@ -7,7 +7,7 @@ import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";
 import Tippy from "./tippy";
 
-type AnchorTagProps = { href: string; to?: string };
+export type AnchorTagProps = { href: string; to?: string };
 
 const AnchorTag = ({ href, ...restProps }: AnchorTagProps) => {
   const [colorMode] = useColorMode();
