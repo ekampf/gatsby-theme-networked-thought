@@ -97,24 +97,30 @@ interface ThoughtsContainerProps {
   slug: string;
 }
 
+type StackedPagesState = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  stackedPages: { slug: string; data: any }[];
+  navigateToStackedPage: (to: string, index?: number | undefined) => void;
+  highlightStackedPage: (slug: string, highlighted?: boolean | undefined) => void;
+  stackedPageStates: ScrollState;
+};
+
+type ScrollContainerRef = (node: HTMLDivElement) => void;
+
 export default function ThoughtsContainer({ thought, location, slug }: ThoughtsContainerProps) {
   const { width } = useWindowSize();
   const processPageQuery = React.useCallback((x) => x.thought, []);
-  const [state, scrollContainer] = useStackedPagesProvider({
+  let [state, scrollContainer] = useStackedPagesProvider({
     firstPage: { slug, data: { thought: thought } },
     location,
     processPageQuery,
     pageWidth: COL_WIDTH,
   });
 
-  const { stackedPages, stackedPageStates } = state as {
-    stackedPages: {
-      slug: string;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: any;
-    }[];
-    stackedPageStates: ScrollState;
-  };
+  state = state as StackedPagesState;
+  scrollContainer = scrollContainer as ScrollContainerRef;
+
+  const { stackedPages, stackedPageStates } = state;
 
   let pages = stackedPages;
   let indexToShow: number;
