@@ -6,14 +6,52 @@ import { jsx, Box, Styled } from "theme-ui";
 import mdxComponents, { AnchorTagProps } from "./mdx-components";
 import ThoughtFooter from "./thought-footer";
 
-interface ThoughtProps {
+type Reference = {
+  slug: string;
+  title: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thought: any;
+};
+
+function ReferencePreviewTip({ reference }: { reference: Reference }) {
+  const { thought } = reference;
+
+  return (
+    <Box bg="background" p={3} sx={{ borderRadius: 2, boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
+      <Styled.h3
+        sx={{
+          my: 3,
+        }}
+      >
+        {thought.title}
+      </Styled.h3>
+      <Styled.p>{thought.childMdx.excerpt}</Styled.p>
+    </Box>
+  );
+}
+
+interface ThoughtProps {
+  thought: {
+    title: string;
+    mtime: string;
+    mtimeFmt: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    childMdx: any;
+    outboundReferences: Reference[];
+  };
 }
 
 export default function Thought({ thought }: ThoughtProps) {
+  const previews: Record<string, React.ReactNode> = {};
+  const outboundReferences = thought.outboundReferences || [];
+  outboundReferences
+    .filter((reference) => !!reference.thought.childMdx.excerpt)
+    .forEach((reference) => {
+      previews[reference.slug] = <ReferencePreviewTip reference={reference} />;
+    });
+
   const AnchorTagWithPopups = (props: AnchorTagProps) => {
-    return <mdxComponents.a {...props} />;
+    return <mdxComponents.a previews={previews} {...props} />;
   };
   // TODO: add tooltip preview info
   const components = { ...mdxComponents, a: AnchorTagWithPopups };

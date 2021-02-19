@@ -15,6 +15,34 @@ export const pageQuery = graphql`
       childMdx {
         body
       }
+      outboundReferences {
+        slug
+        thought {
+          id
+          title
+          slug
+          childMdx {
+            body
+            excerpt
+          }
+        }
+        previewMarkdown
+        previewHtml
+      }
+      inboundReferences {
+        slug
+        thought {
+          id
+          title
+          slug
+          childMdx {
+            body
+            excerpt
+          }
+        }
+        previewMarkdown
+        previewHtml
+      }
     }
   }
 `;

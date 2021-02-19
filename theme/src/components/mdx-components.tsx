@@ -7,9 +7,13 @@ import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";
 import Tippy from "./tippy";
 
-export type AnchorTagProps = { href: string; to?: string };
+export type AnchorTagProps = {
+  href: string;
+  to?: string;
+  previews?: { [key: string]: React.ReactNode };
+};
 
-const AnchorTag = ({ href, ...restProps }: AnchorTagProps) => {
+function AnchorTag({ href, previews, ...restProps }: AnchorTagProps) {
   const [colorMode] = useColorMode();
   const { width } = useWindowSize();
   const stacked = width >= 768;
@@ -17,10 +21,12 @@ const AnchorTag = ({ href, ...restProps }: AnchorTagProps) => {
     href = restProps.to as string;
   }
 
+  const previewsMapping = previews || {};
+
   if (!href.match(/^http/)) {
     if (stacked) {
       return (
-        <Tippy content="This is just a sample about page to use as a root. You can point a markdown editor tool, ">
+        <Tippy content={previewsMapping[href.replace(/^\//, "")]}>
           <LinkToStacked {...restProps} to={href} sx={{ variant: "links.internal" }} />
         </Tippy>
       );
@@ -30,7 +36,7 @@ const AnchorTag = ({ href, ...restProps }: AnchorTagProps) => {
 
   const externalVariant = `links.external-${colorMode}`;
   return <Styled.a {...restProps} href={href} sx={{ variant: externalVariant }} />;
-};
+}
 
 type ImageProps = { src: string } & GatsbyImageOptionalProps;
 
