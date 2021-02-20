@@ -5,7 +5,7 @@ import _ from "lodash";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";
-import Tippy from "./tippy";
+import Tippy, { TipContentWrapper } from "./tippy";
 
 export type AnchorTagProps = {
   href: string;
@@ -35,7 +35,13 @@ function AnchorTag({ href, previews, ...restProps }: AnchorTagProps) {
   }
 
   const externalVariant = `links.external-${colorMode}`;
-  return <Styled.a {...restProps} href={href} sx={{ variant: externalVariant }} />;
+  const tipContent = <TipContentWrapper>{href}</TipContentWrapper>;
+
+  return (
+    <Tippy content={tipContent} placement="top">
+      <Styled.a {...restProps} href={href} sx={{ variant: externalVariant }} />
+    </Tippy>
+  );
 }
 
 type ImageProps = { src: string } & GatsbyImageOptionalProps;

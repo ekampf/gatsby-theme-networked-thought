@@ -5,6 +5,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx";
 import { jsx, Box, Styled } from "theme-ui";
 import mdxComponents, { AnchorTagProps } from "./mdx-components";
 import ThoughtFooter from "./thought-footer";
+import { TipContentWrapper } from "./tippy";
 
 type Reference = {
   slug: string;
@@ -17,7 +18,7 @@ function ReferencePreviewTip({ reference }: { reference: Reference }) {
   const { thought } = reference;
 
   return (
-    <Box bg="background" p={3} sx={{ borderRadius: 2, boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
+    <TipContentWrapper>
       <Styled.h3
         sx={{
           my: 3,
@@ -26,7 +27,7 @@ function ReferencePreviewTip({ reference }: { reference: Reference }) {
         {thought.title}
       </Styled.h3>
       <Styled.p>{thought.childMdx.excerpt}</Styled.p>
-    </Box>
+    </TipContentWrapper>
   );
 }
 
