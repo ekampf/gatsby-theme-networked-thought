@@ -11,7 +11,7 @@ type ReferencesProps = {
     title: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     thought: any;
-  };
+  }[];
 };
 
 export default function References({ references }: ReferencesProps) {
