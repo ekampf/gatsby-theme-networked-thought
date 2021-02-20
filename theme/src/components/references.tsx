@@ -20,7 +20,7 @@ export default function References({ references }: ReferencesProps) {
 
   return (
     <div>
-      <Heading as="h4" color="text-light">
+      <Heading as="h4" color="muted">
         Referred in
       </Heading>
       <div sx={{ mb: 2 }}>
@@ -29,7 +29,7 @@ export default function References({ references }: ReferencesProps) {
             key={ref.slug}
             sx={{
               textDecoration: "none",
-              color: "text-light",
+              color: "muted",
               ":hover": {
                 color: "text",
               },
@@ -37,8 +37,10 @@ export default function References({ references }: ReferencesProps) {
             to={`/${ref.slug}`}
           >
             <div sx={{ py: 2 }}>
-              <Styled.p sx={{ fontSize: 2, m: 0, color: "text-light" }}>{ref.thought.title}</Styled.p>
-              <cite sx={{ fontSize: 1, m: 0, color: "text-light" }}>{ref.thought.childMdx.excerpt}</cite>
+              <Heading as="h5" sx={{ m: 0, color: "muted" }}>
+                {ref.thought.title}
+              </Heading>
+              <cite sx={{ fontSize: 1, m: 0, color: "muted" }}>{ref.thought.childMdx.excerpt}</cite>
             </div>
           </RefLink>
         ))}
