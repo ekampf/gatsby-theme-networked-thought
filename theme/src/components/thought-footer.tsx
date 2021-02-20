@@ -1,8 +1,18 @@
 /** @jsx jsx */
 import { graphql, useStaticQuery } from "gatsby";
 import { jsx, Styled, Box } from "theme-ui";
+import References from "./references";
 
-export default function ThoughtFooter() {
+type ThoughtFooterProps = {
+  references: {
+    slug: string;
+    title: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    thought: any;
+  };
+};
+
+export default function ThoughtFooter({ references }: ThoughtFooterProps) {
   const data = useStaticQuery(graphql`
     query ThoughtFooterQuery {
       site {
@@ -19,6 +29,7 @@ export default function ThoughtFooter() {
 
   return (
     <Box as="footer" p={3} sx={{ borderRadius: 2, backgroundColor: "backgroundSecondary" }} mb={2} color="muted">
+      <References references={references} />
       <p sx={{ m: 0, fontSize: 1 }}>
         If you think this note resonated, be it positive or negative, send me a{" "}
         <Styled.a sx={{ textDecoration: "underline", color: "muted" }} href={sendTweetLink}>

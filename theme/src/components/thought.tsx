@@ -37,6 +37,7 @@ interface ThoughtProps {
     mtimeFmt: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     childMdx: any;
+    inboundReferences: Reference[];
     outboundReferences: Reference[];
   };
 }
@@ -66,8 +67,7 @@ export default function Thought({ thought }: ThoughtProps) {
 
         <MDXRenderer>{thought.childMdx.body}</MDXRenderer>
       </Box>
-      {/* <Footer references={note.inboundReferenceNotes} /> */}
-      <ThoughtFooter />
+      <ThoughtFooter references={thought.inboundReferences} />
     </MDXProvider>
   );
 }
