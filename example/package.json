@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ekampf/gatsby-theme-networked-thought": "*",
-    "gatsby": "^2.32.3",
+    "gatsby": "^2.32.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
