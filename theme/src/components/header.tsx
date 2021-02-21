@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { graphql, Link, useStaticQuery } from "gatsby";
+import DarkModeToggle from "react-dark-mode-toggle";
 import { jsx, Box, useColorMode } from "theme-ui";
 
 export default function Header() {
@@ -21,13 +22,16 @@ export default function Header() {
           {data.site.siteMetadata.title}
         </Link>
         {"  "}
-        <button
-          onClick={() => {
-            setColorMode(colorMode === "default" ? "dark" : "default");
+        <DarkModeToggle
+          size={40}
+          onChange={() => {
+            setTimeout(() => {
+              setColorMode(colorMode === "default" ? "dark" : "default");
+            }, 800);
           }}
-        >
-          Toggle {colorMode === "default" ? "Dark" : "Light"}
-        </button>
+          checked={colorMode != "default"}
+          className="darkModeToggle"
+        />
       </Box>
     </header>
   );

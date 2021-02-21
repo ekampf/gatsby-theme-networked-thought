@@ -153,6 +153,11 @@ export default function ThoughtsContainer({ thought, location, slug }: ThoughtsC
             font-smoothing: antialiased;
           }
 
+          .darkModeToggle {
+            float: right;
+            outline: 0;
+          }
+
           .gatsby-code-title {
             margin-bottom: -0.6rem;
             padding: 0.25rem 1rem;
