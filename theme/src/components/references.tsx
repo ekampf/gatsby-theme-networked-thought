@@ -1,9 +1,8 @@
 /** @jsx jsx */
 import { Link } from "gatsby";
-import React from "react";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
-import { jsx, Styled, Box, Heading } from "theme-ui";
+import { jsx, Heading } from "theme-ui";
 
 type ReferencesProps = {
   references: {

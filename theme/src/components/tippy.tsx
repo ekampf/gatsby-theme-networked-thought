@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 import { Box, jsx } from "theme-ui";
 import "tippy.js/animations/shift-away-extreme.css";
 
-export function TipContentWrapper({ children }: PropsWithChildren<{}>) {
+export function TipContentWrapper({ children }: PropsWithChildren<Record<string, unknown>>) {
   return (
     <Box bg="background" p={3} sx={{ borderRadius: 2, boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
       {children}
