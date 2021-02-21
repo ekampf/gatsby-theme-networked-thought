@@ -8,13 +8,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: "14.15.x"
           registry-url: "https://registry.npmjs.org"
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
+
       # Publish to npm
-      - run: yarn npm publish --access restricted
+      - run: yarn workspace @ekampf/gatsby-theme-networked-thought publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # Setup .npmrc file to publish to GitHub Packages
@@ -24,6 +25,6 @@ jobs:
           # Defaults to the user or organization that owns the workflow file
           scope: "@ekampf"
       # Publish to GitHub Packages
-      - run: yarn npm publish
+      - run: yarn workspace @ekampf/gatsby-theme-networked-thought publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
