@@ -35,6 +35,6 @@ jobs:
 
       # Publish to GitHub Packages
       - run: yarn config set registry https://npm.pkg.github.com
-      - run: yarn workspace gatsby-theme-networked-thought publish --access public
+      - run: yarn workspace gatsby-theme-networked-thought publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
