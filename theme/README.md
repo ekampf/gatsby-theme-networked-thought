@@ -46,6 +46,38 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 | `rootThought`       | "about"                           | Name of the 'index' note. So in this case about.md would generate the root page.       |
 | `generateSlug`      | `(filename) => slugify(filename)` | Function used to turn the filename of a note into its resulting slug (path)            |
 
+## Feature Details
+
+### Double square-bracket linking
+
+The core feature of taking networked thoughts notes - any piece of text wrapped in doubl square-brackets (ex: [[some thought]]) will turn into a link to
+a page on that topic. If the page already exists it will link to that, if not it will create a new empty page.
+When generating that page, a reference is created back to the linking page.
+
+This means that you can create new topics without any content backing them and start linking to them from different pages on your networked thought graph.
+These "empty thoughts" will still be backlinked to wherever you linked to them from.
+This makes it easy to start linking together future-notes without having to write them at that moment.
+
+Links are:
+
+- Case Insensitive - so for example [[Apple]] and [apple] lead to the same page.
+- Support folder heirarchies - So for example, [[Company/Apple]] would link to `<root content folder>/company/apple.md`
+
+### Frontmatter Support
+
+Frontmatter properties allow you to customize the page generation from the given markdown.
+For example `Evergreen Notes.md` could contain:
+
+```
+---
+title: "Evergreen Notes"
+aliases: ["evergreen", ""]
+---
+```
+
+- **title** - By default the page's `title` is its slug unless given a value.
+- **aliases** - Allows adding aliases to a given page. In the example above, because there's an alias you could use `[[evergreen]]` to link to the page `Evergreen Notes.md` represents.
+
 ### Run example
 
 ```shell
