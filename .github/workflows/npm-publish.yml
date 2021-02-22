@@ -12,25 +12,29 @@ jobs:
         with:
           node-version: "14.15.x"
           registry-url: "https://registry.npmjs.org"
+          scope: "@ekampf"
 
       - uses: actions/cache@v2
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - run: npm update --global yarn
       - run: yarn install --frozen-lockfile
 
       # Publish to npm
-      - run: yarn workspace @ekampf/gatsby-theme-networked-thought publish --access public
+      - run: yarn workspace gatsby-theme-networked-thought publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           registry-url: "https://npm.pkg.github.com"
-          # Defaults to the user or organization that owns the workflow file
           scope: "@ekampf"
+
       # Publish to GitHub Packages
-      - run: yarn workspace @ekampf/gatsby-theme-networked-thought publish
+      - run: yarn config set registry https://npm.pkg.github.com
+      - run: yarn workspace gatsby-theme-networked-thought publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

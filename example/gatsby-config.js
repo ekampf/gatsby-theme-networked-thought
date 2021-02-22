@@ -7,7 +7,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `@ekampf/gatsby-theme-networked-thought`,
+      resolve: `gatsby-theme-networked-thought`,
       options: {},
     },
   ],
