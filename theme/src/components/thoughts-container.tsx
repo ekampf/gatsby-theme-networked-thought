@@ -93,7 +93,7 @@ interface ThoughtsContainerProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   thought: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  location: any;
+  location: Location;
   slug: string;
 }
 
