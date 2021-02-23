@@ -25,6 +25,4 @@ module.exports = ({ Joi }) =>
     }),
     rootPath: Joi.string().default("/"),
     rootThought: Joi.string().default("about"),
-    hideDoubleBrackets: Joi.boolean().default(true),
-    rssTitle: Joi.string().default("gatsby-theme-ekampf-digital-garden generated rss feed"),
   });
