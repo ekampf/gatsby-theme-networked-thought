@@ -112,6 +112,7 @@ function generateThoughts(api, pluginOptions) {
   const fileNodes = api.getNodesByType("File");
 
   slugToThoughtMap.forEach((thought, slug) => {
+    const { frontmatter } = thought;
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
     const nodeData = {
       slug,
@@ -145,7 +146,8 @@ function generateThoughts(api, pluginOptions) {
       })
       .filter((x) => x != null);
 
-    const inboundReferences = backlinkMap.get(slug) || [];
+    const showInboundReferences = frontmatter.showReferences === undefined ? true : frontmatter.showReferences;
+    const inboundReferences = (showInboundReferences && backlinkMap.get(slug)) || [];
     nodeData.inboundReferences = inboundReferences.map(({ source, previewMarkdown }) => {
       const linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
 
