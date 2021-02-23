@@ -1,3 +1,8 @@
+---
+title: Amazon
+private: true
+---
+
 # Amazon (AMZN)
 
 Notes about Amazon
