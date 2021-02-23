@@ -1,4 +1,3 @@
-const matter = require(`gray-matter`);
 const unified = require(`unified`);
 const markdown = require(`remark-parse`);
 
@@ -15,9 +14,8 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
   const nameToSlugMap = new Map();
   const allReferences = [];
 
-  markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent, birthtime, mtime }) => {
+  markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent, content, frontmatter, birthtime, mtime }) => {
     reporter.info(`processing thought ${filename}`);
-    const { content, data: frontmatter } = matter(rawContent);
     const tree = unified().use(markdown).parse(content);
 
     nameToSlugMap.set(slug, slug);

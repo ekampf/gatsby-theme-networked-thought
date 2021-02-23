@@ -20,6 +20,11 @@ function generateSlug(str) {
 module.exports = ({ Joi }) =>
   Joi.object({
     thoughtsDirectory: Joi.string().default("content/garden/"),
+    exclude: Joi.array().items(Joi.string()).default([]),
+    private: Joi.array().items(Joi.string()).default([]),
+    privateMarkdown: Joi.string().default("This note is a [[private note]]"),
+    showPrivateLocally: Joi.boolean().default(true),
+    showHiddenLocally: Joi.boolean().default(true),
     generateSlug: Joi.function().default(function () {
       return generateSlug;
     }),
