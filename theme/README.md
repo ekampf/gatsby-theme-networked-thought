@@ -39,12 +39,17 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 
 ## 🎓 Usage
 
-| Option              | Default Value                     | Description                                                                            |
-| ------------------- | --------------------------------- | -------------------------------------------------------------------------------------- |
-| `thoughtsDirectory` | "content/garden/"                 | Directory containing your digital garden notes.                                        |
-| `rootPath`          | "/"                               | Set the root url for the brain on your site (e.g. in this case <https://example.com/>) |
-| `rootThought`       | "about"                           | Name of the 'index' note. So in this case about.md would generate the root page.       |
-| `generateSlug`      | `(filename) => slugify(filename)` | Function used to turn the filename of a note into its resulting slug (path)            |
+| Option               | Default Value                     | Description                                                                                             |
+| -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `thoughtsDirectory`  | "content/garden/"                 | Directory containing your digital garden notes.                                                         |
+| `exclude`            | []                                | List of strings or regular expressions. Notes files whose names match these will be ignored.            |
+| `private`            | []                                | List of strings or regular expressions. Notes files whose names match these will be considered private. |
+| `privateMarkdown`    | "This note is a [[private note]]" | The markdown text to show on private notes when instead of their content.                               |
+| `showPrivateLocally` | true                              | Boolean. Determines whether to show private notes when not running in production.                       |
+| `showHiddenLocally`  | true                              | Boolean. Determines whether to show hidden notes when not running in production.                        |
+| `rootPath`           | "/"                               | Set the root url for the brain on your site (e.g. in this case <https://example.com/>)                  |
+| `rootThought`        | "about"                           | Name of the 'index' note. So in this case about.md would generate the root page.                        |
+| `generateSlug`       | `(filename) => slugify(filename)` | Function used to turn the filename of a note into its resulting slug (path)                             |
 
 ## Feature Details
 
@@ -75,8 +80,13 @@ aliases: ["evergreen", ""]
 ---
 ```
 
+Frontmatter supported properties:
+
 - **title** - By default the page's `title` is its slug unless given a value.
 - **aliases** - Allows adding aliases to a given page. In the example above, because there's an alias you could use `[[evergreen]]` to link to the page `Evergreen Notes.md` represents.
+- **private** - Boolean. Whether the note is private or not.
+- **hidden** - Boolean. Whether the note is hidden or not.
+- **showReferences** - Boolean. Whether we want to show references to this note.
 
 ### Run example
 
