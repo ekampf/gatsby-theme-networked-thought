@@ -3,7 +3,6 @@ const path = require(`path`);
 const matter = require(`gray-matter`);
 
 const isProduction = process.env.NODE_ENV === "production";
-console.log("isProduction is", isProduction);
 
 function stringToRegExp(value) {
   if (typeof value === "string") {
