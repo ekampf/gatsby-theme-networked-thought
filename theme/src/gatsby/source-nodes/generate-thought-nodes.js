@@ -62,9 +62,9 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
 
     slugToThoughtMap.set(slug, {
       title: frontmatter.title,
-      content: content,
-      rawContent: rawContent,
-      fullPath: fullPath,
+      content,
+      rawContent,
+      fullPath,
       birthtime,
       mtime,
       frontmatter,
