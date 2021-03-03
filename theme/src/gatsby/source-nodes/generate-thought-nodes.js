@@ -1,7 +1,7 @@
 const unified = require(`unified`);
 const markdown = require(`remark-parse`);
 
-const linkify = require(`./linkify`);
+const linkify = require(`./linkify`).default;
 const { generatePreviewMarkdown, generatePreviewHtml } = require(`./generate-preview-markdown`);
 const { getMarkdownThoughts } = require(`./get-markdown-thoughts`);
 
