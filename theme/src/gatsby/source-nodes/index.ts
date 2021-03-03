@@ -1,31 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-const chokidar = require(`chokidar`);
-const fs = require(`fs`);
-const path = require(`path`);
-const { createMachine, interpret } = require(`xstate`);
+import chokidar from "chokidar";
+import fs from "fs";
+import path from "path";
+import { createMachine, interpret } from "xstate";
 
-const generateThoughts = require(`./generate-thought-nodes`).default;
+import generateThoughts from "./generate-thought-nodes";
+import type { PluginOptions } from "../plugin-options-schema";
+import type { NodePluginArgs, Reporter } from "gatsby";
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
  */
-const createFSMachine = (api, pluginOptions) => {
+const createFSMachine = (api: NodePluginArgs, pluginOptions: PluginOptions) => {
   const { reporter } = api;
 
   // For every path that is reported before the 'ready' event, we throw them
   // into a queue and then flush the queue when 'ready' event arrives.
   // After 'ready', we handle the 'add' event without putting it into a queue.
-  let pathQueue = [];
+  let pathQueue: {op: string, path: string}[] = [];
   const flushPathQueue = () => {
     const queue = pathQueue.slice();
-    pathQueue = null;
+    pathQueue = [];
     return generateThoughts(api, pluginOptions);
-  };
-
-  const log = (expr) => (ctx, action, meta) => {
-    if (meta.state.matches(`BOOTSTRAP.BOOTSTRAPPED`)) {
-      reporter.info(expr(ctx, action, meta));
-    }
   };
 
   const fsMachine = createMachine(
@@ -61,13 +57,13 @@ const createFSMachine = (api, pluginOptions) => {
             READY: {
               on: {
                 CHOKIDAR_ADD: {
-                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `added ${pathType} at ${path}`)],
+                  actions: [`createAndProcessNode`],
                 },
                 CHOKIDAR_CHANGE: {
-                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `changed ${pathType} at ${path}`)],
+                  actions: [`createAndProcessNode`],
                 },
                 CHOKIDAR_UNLINK: {
-                  actions: [`createAndProcessNode`, log((_, { pathType, path }) => `deleted ${pathType} at ${path}`)],
+                  actions: [`createAndProcessNode`],
                 },
               },
             },
@@ -96,12 +92,12 @@ const createFSMachine = (api, pluginOptions) => {
   return interpret(fsMachine).start();
 };
 
-module.exports = async (api, pluginOptions) => {
+module.exports = async (api: NodePluginArgs, pluginOptions: PluginOptions) => {
   // Validate that the path exists.
   if (!fs.existsSync(pluginOptions.thoughtsDirectory)) {
     api.reporter.panic(`
 The path passed to gatsby-theme-networked-thought does not exist on your file system:
-${pluginOptions.path}
+${pluginOptions.thoughtsDirectory}
 Please pick a path to an existing directory.
       `);
   }
