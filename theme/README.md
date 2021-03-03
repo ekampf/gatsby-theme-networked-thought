@@ -55,7 +55,7 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 
 ### Double square-bracket linking
 
-The core feature of taking networked thoughts notes - any piece of text wrapped in doubl square-brackets (ex: [[some thought]]) will turn into a link to
+The core feature of taking networked thoughts notes - any piece of text wrapped in double square-brackets (ex: [[some thought]]) will turn into a link to
 a page on that topic. If the page already exists it will link to that, if not it will create a new empty page.
 When generating that page, a reference is created back to the linking page.
 
@@ -66,7 +66,7 @@ This makes it easy to start linking together future-notes without having to writ
 Links are:
 
 - Case Insensitive - so for example [[Apple]] and [apple] lead to the same page.
-- Support folder heirarchies - So for example, [[Company/Apple]] would link to `<root content folder>/company/apple.md`
+- Support folder hierarchies - So for example, [[Company/Apple]] would link to `<root content folder>/company/apple.md`
 
 ### Frontmatter Support
 
