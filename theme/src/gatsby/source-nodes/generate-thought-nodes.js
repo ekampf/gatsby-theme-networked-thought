@@ -2,7 +2,7 @@ const unified = require(`unified`);
 const markdown = require(`remark-parse`);
 
 const linkify = require(`./linkify`).default;
-const { generatePreviewMarkdown, generatePreviewHtml } = require(`./generate-preview-markdown`);
+const { generatePreviewMarkdown, generatePreviewHtml } = require(`./generate-preview-markdown`).default;
 const getMarkdownThoughts = require(`./get-markdown-thoughts`).default;
 
 function getThoughtId(slug, createNodeId) {
