@@ -12,5 +12,5 @@
     "esModuleInterop": true
   },
   "include": ["./example/src/", "./theme/src/", "./@types"],
-  "exclude": ["node_modules", "example/node_modules", "theme/node_modules"]
+  "exclude": ["node_modules", "example/node_modules", "example/public", "theme/node_modules"]
 }
