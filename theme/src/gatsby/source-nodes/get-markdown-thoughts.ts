@@ -36,9 +36,10 @@ export type ThoughtFrontmatter = {
   aliases?: string[];
   private?: boolean;
   hidden?: boolean;
+  showReferences?: boolean;
 }
 
-export type Thought = {
+export type MarkdownThought = {
   birthtime: Date;
   mtime: Date;
   filename: string;
@@ -65,7 +66,7 @@ export default function getMarkdownThoughts({
   privateMarkdown,
   showPrivateLocally,
   showHiddenLocally,
-}: PluginOptions): Thought[] {
+}: PluginOptions): MarkdownThought[] {
   const exclusions = (exclude && exclude.map(stringToRegExp)) || [];
   const privates = (excludeAsPrivate && excludeAsPrivate.map(stringToRegExp)) || [];
   const filenames = getAllFiles(thoughtsDirectory).map((filename) => filename.slice(thoughtsDirectory.length));
@@ -78,7 +79,7 @@ export default function getMarkdownThoughts({
       return [".md", ".mdx"].includes(path.extname(filename).toLowerCase());
     })
     .filter(doesNotMatchAny(exclusions))
-    .map<Thought | null>((filename) => {
+    .map<MarkdownThought | null>((filename) => {
       const { dir, name } = path.parse(filename);
       const noteName = path.join(dir, name);
       const slug = generateSlug(noteName);

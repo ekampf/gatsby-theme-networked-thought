@@ -15,7 +15,13 @@
   },
   "files.autoSave": "onFocusChange",
 
-  "cSpell.words": ["Chokidar's", "frontmatter", "xstate"],
+  "cSpell.words": [
+    "Chokidar's",
+    "Slugified",
+    "backlinks",
+    "frontmatter",
+    "xstate"
+  ],
 
   // Files to not show on editor
   "files.exclude": {

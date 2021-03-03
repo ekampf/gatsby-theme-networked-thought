@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "commonjs",
     "jsx": "react",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "strict": true,

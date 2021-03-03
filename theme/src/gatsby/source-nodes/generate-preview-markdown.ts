@@ -49,7 +49,7 @@ function textNoEscaping(this: unified.Processor) {
   visitors.text = f;
 }
 
-function generatePreviewMarkdown(tree: Node, position: number) {
+export function generatePreviewMarkdown(tree: Node, position: number) {
   let { parent } = findDeepestChildForPosition(null, tree as Parent, position);
 
   // Adding this logic to avoid including too large an amount of content. May need additional heuristics to improve this
@@ -63,7 +63,7 @@ function generatePreviewMarkdown(tree: Node, position: number) {
   return processor.stringify(parent.node);
 }
 
-function generatePreviewHtml(markdownText:string) {
+export function generatePreviewHtml(markdownText:string) {
   const previewHtml = unified()
     .use(markdown)
     .use(gfm)
@@ -74,5 +74,3 @@ function generatePreviewHtml(markdownText:string) {
 
   return previewHtml;
 }
-
-export default { generatePreviewMarkdown, generatePreviewHtml };

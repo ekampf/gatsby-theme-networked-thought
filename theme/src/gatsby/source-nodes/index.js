@@ -4,7 +4,7 @@ const fs = require(`fs`);
 const path = require(`path`);
 const { createMachine, interpret } = require(`xstate`);
 
-const { generateThoughts } = require(`./generate-thought-nodes`);
+const generateThoughts = require(`./generate-thought-nodes`).default;
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
