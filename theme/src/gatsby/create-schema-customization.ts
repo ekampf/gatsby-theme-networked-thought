@@ -1,4 +1,9 @@
-module.exports = ({ actions, reporter }) => {
+import type { CreateSchemaCustomizationArgs, GatsbyNode } from "gatsby";
+
+
+
+
+const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({ actions, reporter }: CreateSchemaCustomizationArgs): any => {
   const { createTypes } = actions;
 
   const typeDefs = `
@@ -24,3 +29,5 @@ module.exports = ({ actions, reporter }) => {
   reporter.info("Digital Garden: setting up schema...");
   createTypes(typeDefs);
 };
+
+export default createSchemaCustomization;
