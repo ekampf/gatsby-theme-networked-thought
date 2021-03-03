@@ -26,11 +26,10 @@ export type PluginOptions = {
   privateMarkdown: string;
   showPrivateLocally: boolean;
   showHiddenLocally: boolean;
-  generateSlug: (str: string) => string,
+  generateSlug: (str: string) => string;
   rootPath: string;
-  rootThought:  string;
-}
-
+  rootThought: string;
+};
 
 const publicOptionsSchema: GatsbyNode["pluginOptionsSchema"] = ({ Joi }) =>
   Joi.object({

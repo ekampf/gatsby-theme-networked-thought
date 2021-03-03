@@ -1,30 +1,29 @@
-import unified from "unified";
-import markdown from "remark-parse";
 import type { NodePluginArgs, Reporter } from "gatsby";
+import markdown from "remark-parse";
+import unified from "unified";
 import type { PluginOptions } from "../plugin-options-schema";
-
-import linkify from "./linkify";
 import { generatePreviewMarkdown, generatePreviewHtml } from "./generate-preview-markdown";
 import getMarkdownThoughts from "./get-markdown-thoughts";
 import type { MarkdownThought, ThoughtFrontmatter } from "./get-markdown-thoughts";
+import linkify from "./linkify";
 
 type BacklinkItem = {
   source: string;
   previewMarkdown: string;
-}
+};
 type ReferenceItem = {
-    text: string;
-    previewMarkdown: string;
-}
+  text: string;
+  previewMarkdown: string;
+};
 type Reference = {
   source: string;
-  references: ReferenceItem[]
-}
+  references: ReferenceItem[];
+};
 
 type Thought = {
   slug: string;
-  name: string,
-  title: string,
+  name: string;
+  title: string;
   birthtime: Date;
   mtime: Date;
   filename: string;
@@ -34,14 +33,17 @@ type Thought = {
   content: string;
   aliases: string[];
   references: ReferenceItem[];
-}
-
+};
 
 function getThoughtId(slug: string, createNodeId: NodePluginArgs["createNodeId"]) {
   return createNodeId(`Thought::${slug}`);
 }
 
-function processMarkdownThoughts(markdownThoughts: MarkdownThought[], pluginOptions: PluginOptions, reporter: Reporter) {
+function processMarkdownThoughts(
+  markdownThoughts: MarkdownThought[],
+  pluginOptions: PluginOptions,
+  reporter: Reporter,
+) {
   const slugToThoughtMap = new Map<string, Thought>();
   const nameToSlugMap = new Map<string, string>();
   const allReferences: Reference[] = [];
@@ -193,7 +195,7 @@ export default function generateThoughts(api: NodePluginArgs, pluginOptions: Plu
       birthtime: thought.birthtime,
       mtime: thought.mtime,
       outboundReferences,
-      inboundReferences
+      inboundReferences,
     };
 
     const nodeContent = JSON.stringify(nodeData);

@@ -12,8 +12,8 @@ function stringToRegExp(value: string): RegExp {
   return value;
 }
 
-const matches = (filename: string) => (regExp:RegExp) => regExp.test(filename);
-const doesNotMatchAny = (regExps: RegExp[]) => (filename:string) => !regExps.some(matches(filename));
+const matches = (filename: string) => (regExp: RegExp) => regExp.test(filename);
+const doesNotMatchAny = (regExps: RegExp[]) => (filename: string) => !regExps.some(matches(filename));
 
 function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): string[] {
   const files = fs.readdirSync(dirPath);
@@ -37,7 +37,7 @@ export type ThoughtFrontmatter = {
   private?: boolean;
   hidden?: boolean;
   showReferences?: boolean;
-}
+};
 
 export type MarkdownThought = {
   birthtime: Date;
@@ -45,11 +45,11 @@ export type MarkdownThought = {
   filename: string;
   fullPath: string;
   slug: string;
-  name: string,
+  name: string;
   frontmatter: ThoughtFrontmatter;
   rawContent: string;
   content: string;
-}
+};
 
 // See https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
@@ -85,7 +85,7 @@ export default function getMarkdownThoughts({
       const slug = generateSlug(noteName);
       const fullPath = thoughtsDirectory + filename;
       const { birthtime, mtime } = fs.statSync(fullPath);
-      let rawContent = fs.readFileSync(fullPath, "utf-8");
+      const rawContent = fs.readFileSync(fullPath, "utf-8");
       const { content, data: frontmatter } = matter(rawContent);
       if (frontmatter.hidden && !showHidden) {
         return null;
@@ -98,7 +98,7 @@ export default function getMarkdownThoughts({
         fullPath,
         slug,
         name: noteName,
-        frontmatter: frontmatter as any as ThoughtFrontmatter,
+        frontmatter: (frontmatter as any) as ThoughtFrontmatter,
       };
 
       const isPrivate = frontmatter.private == true || privates.some(matches(filename));
@@ -116,5 +116,5 @@ export default function getMarkdownThoughts({
         content,
       };
     })
-    .filter(notEmpty)
+    .filter(notEmpty);
 }

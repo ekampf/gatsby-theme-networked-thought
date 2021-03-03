@@ -1,9 +1,9 @@
 import type { CreateSchemaCustomizationArgs, GatsbyNode } from "gatsby";
 
-
-
-
-const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({ actions, reporter }: CreateSchemaCustomizationArgs): any => {
+const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({
+  actions,
+  reporter,
+}: CreateSchemaCustomizationArgs): any => {
   const { createTypes } = actions;
 
   const typeDefs = `

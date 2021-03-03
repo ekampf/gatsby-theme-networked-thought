@@ -1,12 +1,11 @@
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
 import html from "rehype-stringify";
-import markdown from "remark-parse";
 import gfm from "remark-gfm";
+import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import stringifyMd from "remark-stringify";
 import unified from "unified";
 import type { Node, Parent } from "unist";
-
 
 function findDeepestChildForPosition(parent: any, tree: any, position: number): any {
   if (!tree.children || tree.children.length == 0) {
@@ -19,7 +18,7 @@ function findDeepestChildForPosition(parent: any, tree: any, position: number): 
   for (const child of tree.children) {
     const childPosition = child.position;
     if (childPosition) {
-      const { start, end } = childPosition
+      const { start, end } = childPosition;
       if (start.offset && start.offset <= position && end.offset && end.offset >= position) {
         return findDeepestChildForPosition(
           {
@@ -63,7 +62,7 @@ export function generatePreviewMarkdown(tree: Node, position: number) {
   return processor.stringify(parent.node);
 }
 
-export function generatePreviewHtml(markdownText:string) {
+export function generatePreviewHtml(markdownText: string) {
   const previewHtml = unified()
     .use(markdown)
     .use(gfm)

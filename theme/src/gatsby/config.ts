@@ -1,4 +1,4 @@
-import type { GatsbyConfig } from "gatsby"
+import type { GatsbyConfig } from "gatsby";
 
 const config = ({ thoughtsDirectory = "content/garden/" }) => ({
   plugins: [

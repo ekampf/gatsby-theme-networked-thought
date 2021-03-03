@@ -1,5 +1,5 @@
-import type { GatsbyNode } from "gatsby"
 import path from "path";
+import type { GatsbyNode } from "gatsby";
 import type { PluginOptions } from "./plugin-options-schema";
 
 interface CreatePagesQuery {
@@ -11,17 +11,16 @@ interface CreatePagesQuery {
       aliases: string[];
       content: string;
       absolutePath: string;
-    }[]
-  }
+    }[];
+  };
 }
-
 
 const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter }, options) => {
   if (!options) {
-    return
+    return;
   }
 
-  const pluginOptions = options as any as PluginOptions;
+  const pluginOptions = (options as any) as PluginOptions;
 
   const { createPage } = actions;
   const template = path.resolve(path.join(__dirname, `../templates/thought.tsx`));
@@ -62,6 +61,6 @@ const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, report
       context: { id, title, slug, absolutePath },
     });
   });
-}
+};
 
 export default createPages;

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import chokidar from "chokidar";
 import fs from "fs";
 import path from "path";
-import { createMachine, interpret } from "xstate";
-
-import generateThoughts from "./generate-thought-nodes";
-import type { PluginOptions } from "../plugin-options-schema";
+import chokidar from "chokidar";
 import type { NodePluginArgs, Reporter } from "gatsby";
+import { createMachine, interpret } from "xstate";
+import type { PluginOptions } from "../plugin-options-schema";
+import generateThoughts from "./generate-thought-nodes";
 
 /**
  * Create a state machine to manage Chokidar's not-ready/ready states.
@@ -17,7 +16,7 @@ const createFSMachine = (api: NodePluginArgs, pluginOptions: PluginOptions) => {
   // For every path that is reported before the 'ready' event, we throw them
   // into a queue and then flush the queue when 'ready' event arrives.
   // After 'ready', we handle the 'add' event without putting it into a queue.
-  let pathQueue: {op: string, path: string}[] = [];
+  let pathQueue: { op: string; path: string }[] = [];
   const flushPathQueue = () => {
     const queue = pathQueue.slice();
     pathQueue = [];
