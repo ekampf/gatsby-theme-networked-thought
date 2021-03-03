@@ -1,34 +1,5 @@
-module.exports = ({ thoughtsDirectory = "content/garden/" }) => ({
-  plugins: [
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: thoughtsDirectory,
-      },
-    },
-    `gatsby-plugin-theme-ui`,
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
-    `gatsby-remark-images`,
-    {
-      resolve: "gatsby-plugin-mdx",
-      options: {
-        extensions: [".mdx", ".md"],
-        gatsbyRemarkPlugins: [
-          `gatsby-remark-copy-linked-files`,
-          `gatsby-remark-mermaid`,
-          `gatsby-remark-code-titles`,
-          `gatsby-remark-prismjs`,
-          `gatsby-remark-smartypants`,
-          `gatsby-remark-external-links`,
-          {
-            resolve: "gatsby-remark-images",
-            options: {
-              maxWidth: 800,
-            },
-          },
-        ],
-      },
-    },
-  ],
+require("ts-node").register({
+  files: true, // so that TS node hooks have access to local typings too
 });
+
+module.exports = require("./src/gatsby/config").default;
