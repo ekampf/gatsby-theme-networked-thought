@@ -1,4 +1,6 @@
-function generateSlug(str) {
+import type { GatsbyNode } from "gatsby";
+
+function generateSlug(str: string) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim
   str = str.toLowerCase();
 
@@ -17,11 +19,23 @@ function generateSlug(str) {
   return str;
 }
 
-module.exports = ({ Joi }) =>
+export type PluginOptions = {
+  thoughtsDirectory: string;
+  exclude: string[];
+  excludeAsPrivate: string[];
+  privateMarkdown: string;
+  showPrivateLocally: boolean;
+  showHiddenLocally: boolean;
+  generateSlug: (str: string) => string;
+  rootPath: string;
+  rootThought: string;
+};
+
+const publicOptionsSchema: GatsbyNode["pluginOptionsSchema"] = ({ Joi }) =>
   Joi.object({
     thoughtsDirectory: Joi.string().default("content/garden/"),
     exclude: Joi.array().items(Joi.string()).default([]),
-    private: Joi.array().items(Joi.string()).default([]),
+    excludeAsPrivate: Joi.array().items(Joi.string()).default([]),
     privateMarkdown: Joi.string().default("This note is a [[private note]]"),
     showPrivateLocally: Joi.boolean().default(true),
     showHiddenLocally: Joi.boolean().default(true),
@@ -31,3 +45,5 @@ module.exports = ({ Joi }) =>
     rootPath: Joi.string().default("/"),
     rootThought: Joi.string().default("about"),
   });
+
+export default publicOptionsSchema;

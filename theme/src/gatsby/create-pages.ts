@@ -1,9 +1,31 @@
-const path = require(`path`);
+import path from "path";
+import type { GatsbyNode } from "gatsby";
+import type { PluginOptions } from "./plugin-options-schema";
 
-module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
+interface CreatePagesQuery {
+  thoughts: {
+    nodes: {
+      id: string;
+      title: string;
+      slug: string;
+      aliases: string[];
+      content: string;
+      absolutePath: string;
+    }[];
+  };
+}
+
+const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter }, options) => {
+  if (!options) {
+    return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pluginOptions = (options as any) as PluginOptions;
+
   const { createPage } = actions;
   const template = path.resolve(path.join(__dirname, `../templates/thought.tsx`));
-  const result = await graphql(`
+  const result = await graphql<CreatePagesQuery>(`
     {
       thoughts: allThought {
         nodes {
@@ -21,7 +43,7 @@ module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
 
   const { rootThought, rootPath } = pluginOptions;
 
-  const nodes = (result.data.thoughts || {}).nodes || [];
+  const nodes = (result.data?.thoughts || {}).nodes || [];
   nodes.forEach((node) => {
     const { id, slug, title, absolutePath } = node;
     if (slug == rootThought || title == rootThought) {
@@ -41,3 +63,5 @@ module.exports = async ({ graphql, actions, reporter }, pluginOptions) => {
     });
   });
 };
+
+export default createPages;

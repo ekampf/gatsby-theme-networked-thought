@@ -15,7 +15,10 @@
   },
   "files.autoSave": "onFocusChange",
 
-  "cSpell.words": ["Chokidar's", "frontmatter", "xstate"],
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  "cSpell.words": ["Chokidar's", "Slugified", "backlinks", "frontmatter", "xstate"],
 
   // Files to not show on editor
   "files.exclude": {

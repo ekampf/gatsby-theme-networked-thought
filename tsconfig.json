@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "commonjs",
     "jsx": "react",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -12,5 +12,5 @@
     "esModuleInterop": true
   },
   "include": ["./example/src/", "./theme/src/", "./@types"],
-  "exclude": ["node_modules", "example/node_modules", "theme/node_modules"]
+  "exclude": ["node_modules", "example/node_modules", "example/public", "theme/node_modules"]
 }

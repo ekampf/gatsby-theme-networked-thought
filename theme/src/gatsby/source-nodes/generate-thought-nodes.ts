@@ -1,18 +1,52 @@
-const unified = require(`unified`);
-const markdown = require(`remark-parse`);
+import type { NodePluginArgs, Reporter } from "gatsby";
+import markdown from "remark-parse";
+import unified from "unified";
+import type { PluginOptions } from "../plugin-options-schema";
+import { generatePreviewMarkdown, generatePreviewHtml } from "./generate-preview-markdown";
+import getMarkdownThoughts from "./get-markdown-thoughts";
+import type { MarkdownThought, ThoughtFrontmatter } from "./get-markdown-thoughts";
+import linkify from "./linkify";
 
-const linkify = require(`./linkify`);
-const { generatePreviewMarkdown, generatePreviewHtml } = require(`./generate-preview-markdown`);
-const { getMarkdownThoughts } = require(`./get-markdown-thoughts`);
+type BacklinkItem = {
+  source: string;
+  previewMarkdown: string;
+};
+type ReferenceItem = {
+  text: string;
+  previewMarkdown: string;
+};
+type Reference = {
+  source: string;
+  references: ReferenceItem[];
+};
 
-function getThoughtId(slug, createNodeId) {
+type Thought = {
+  slug: string;
+  name: string;
+  title: string;
+  birthtime: Date;
+  mtime: Date;
+  filename: string;
+  fullPath: string;
+  frontmatter: ThoughtFrontmatter;
+  rawContent: string;
+  content: string;
+  aliases: string[];
+  references: ReferenceItem[];
+};
+
+function getThoughtId(slug: string, createNodeId: NodePluginArgs["createNodeId"]) {
   return createNodeId(`Thought::${slug}`);
 }
 
-function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
-  const slugToThoughtMap = new Map();
-  const nameToSlugMap = new Map();
-  const allReferences = [];
+function processMarkdownThoughts(
+  markdownThoughts: MarkdownThought[],
+  pluginOptions: PluginOptions,
+  reporter: Reporter,
+) {
+  const slugToThoughtMap = new Map<string, Thought>();
+  const nameToSlugMap = new Map<string, string>();
+  const allReferences: Reference[] = [];
 
   markdownThoughts.forEach(({ filename, fullPath, name, slug, rawContent, content, frontmatter, birthtime, mtime }) => {
     reporter.info(`processing thought ${filename}`);
@@ -24,7 +58,7 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
       nameToSlugMap.set(frontmatter.title.toLowerCase(), slug);
     }
 
-    const aliases = [];
+    const aliases: string[] = [];
     if (frontmatter.aliases != null) {
       frontmatter.aliases
         .map((a) => a.trim().toLowerCase())
@@ -34,13 +68,13 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
         });
     }
 
-    const references = [];
+    const references: ReferenceItem[] = [];
 
     const regex = /(?<=\[\[).*?(?=\]\])/g;
     const referencesMatches = [...content.matchAll(regex)] || [];
     referencesMatches.forEach((match) => {
       const text = match[0];
-      const start = match.index;
+      const start = match.index as number;
 
       // TODO: generate previewMarkdown
       const previewMarkdown = generatePreviewMarkdown(tree, start);
@@ -62,11 +96,14 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
 
     slugToThoughtMap.set(slug, {
       title: frontmatter.title,
+      slug,
+      name,
       content,
       rawContent,
       fullPath,
       birthtime,
       mtime,
+      filename,
       frontmatter,
       aliases,
       references,
@@ -80,9 +117,8 @@ function processMarkdownThoughts(markdownThoughts, pluginOptions, reporter) {
   };
 }
 
-function generateThoughts(api, pluginOptions) {
-  const { actions } = api;
-  const { reporter } = api;
+export default function generateThoughts(api: NodePluginArgs, pluginOptions: PluginOptions) {
+  const { actions, reporter } = api;
   const markdownThoughts = getMarkdownThoughts(pluginOptions);
   const { slugToThoughtMap, nameToSlugMap, allReferences } = processMarkdownThoughts(
     markdownThoughts,
@@ -91,7 +127,7 @@ function generateThoughts(api, pluginOptions) {
   );
 
   // Calculate backlinks for every slug
-  const backlinkMap = new Map();
+  const backlinkMap = new Map<string, BacklinkItem[]>();
   allReferences.forEach(({ source, references }) => {
     references.forEach((ref) => {
       const { text, previewMarkdown } = ref;
@@ -114,19 +150,8 @@ function generateThoughts(api, pluginOptions) {
   slugToThoughtMap.forEach((thought, slug) => {
     const { frontmatter } = thought;
     const content = linkify(thought.content, nameToSlugMap, pluginOptions);
-    const nodeData = {
-      slug,
-      title: thought.title,
-      aliases: thought.aliases,
-      content: content,
-      rawContent: content,
-      absolutePath: thought.fullPath,
-      birthtime: thought.birthtime,
-      mtime: thought.mtime,
-    };
 
-    const outboundReferences = thought.references;
-    nodeData.outboundReferences = outboundReferences
+    const outboundReferences = thought.references
       .map(({ text, previewMarkdown }) => {
         const slug = nameToSlugMap.get(text.toLowerCase());
         if (slug === undefined) {
@@ -147,8 +172,8 @@ function generateThoughts(api, pluginOptions) {
       .filter((x) => x != null);
 
     const showInboundReferences = frontmatter.showReferences === undefined ? true : frontmatter.showReferences;
-    const inboundReferences = (showInboundReferences && backlinkMap.get(slug)) || [];
-    nodeData.inboundReferences = inboundReferences.map(({ source, previewMarkdown }) => {
+    const inboundReferencesData = (showInboundReferences && backlinkMap.get(slug)) || [];
+    const inboundReferences = inboundReferencesData.map(({ source, previewMarkdown }) => {
       const linkifiedMarkdown = linkify(previewMarkdown, nameToSlugMap, pluginOptions);
 
       const previewHtml = generatePreviewHtml(linkifiedMarkdown);
@@ -160,11 +185,24 @@ function generateThoughts(api, pluginOptions) {
       };
     });
 
+    const nodeData = {
+      slug,
+      title: thought.title,
+      aliases: thought.aliases,
+      content: content,
+      rawContent: content,
+      absolutePath: thought.fullPath,
+      birthtime: thought.birthtime,
+      mtime: thought.mtime,
+      outboundReferences,
+      inboundReferences,
+    };
+
     const nodeContent = JSON.stringify(nodeData);
 
     const nodeMeta = {
       id: getThoughtId(slug, api.createNodeId),
-      parent: fileNodes.find((fn) => fn.absolutePath == thought.fullPath).id,
+      parent: fileNodes.find((fn) => fn.absolutePath == thought.fullPath)?.id,
       children: [],
       internal: {
         type: `Thought`,
@@ -178,7 +216,3 @@ function generateThoughts(api, pluginOptions) {
     actions.createNode(node);
   });
 }
-
-module.exports = {
-  generateThoughts,
-};

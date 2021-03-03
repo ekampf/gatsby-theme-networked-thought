@@ -1,4 +1,12 @@
-function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap, pluginOptions) {
+import type { PluginOptions } from "../plugin-options-schema";
+
+function processRegExps(
+  regexpInclusive: RegExp,
+  regexpExclusive: RegExp,
+  content: string,
+  nameToSlugMap: Map<string, string>,
+  pluginOptions: PluginOptions,
+) {
   const matches = content.match(regexpInclusive);
   if (matches === null) {
     return content;
@@ -9,7 +17,12 @@ function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap
   matches
     .filter((a, b) => matches.indexOf(a) === b)
     .forEach((match) => {
-      const text = match.match(regexpExclusive)[0];
+      const textMatch = match.match(regexpExclusive);
+      if (textMatch === null) {
+        return;
+      }
+
+      const text = textMatch[0];
       const name = text.toLowerCase();
       if (nameToSlugMap.has(name)) {
         const link = nameToSlugMap.get(name);
@@ -22,7 +35,11 @@ function processRegExps(regexpInclusive, regexpExclusive, content, nameToSlugMap
   return newContent;
 }
 
-function linkify(content, nameToSlugMap, pluginOptions) {
+export default function linkify(
+  content: string,
+  nameToSlugMap: Map<string, string>,
+  pluginOptions: PluginOptions,
+): string {
   // Find matches for content between double brackets
   // e.g. [[Example]] -> Example
   const bracketRegexExclusive = /(?<=\[\[).*?(?=\]\])/g;
@@ -33,5 +50,3 @@ function linkify(content, nameToSlugMap, pluginOptions) {
 
   return processRegExps(bracketRegexInclusive, bracketRegexExclusive, content, nameToSlugMap, pluginOptions);
 }
-
-module.exports = linkify;
