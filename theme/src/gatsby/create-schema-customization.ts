@@ -3,7 +3,8 @@ import type { CreateSchemaCustomizationArgs, GatsbyNode } from "gatsby";
 const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({
   actions,
   reporter,
-}: CreateSchemaCustomizationArgs): any => {
+}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+CreateSchemaCustomizationArgs): any => {
   const { createTypes } = actions;
 
   const typeDefs = `

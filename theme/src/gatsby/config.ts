@@ -1,6 +1,6 @@
-import type { GatsbyConfig } from "gatsby";
+import { PluginOptions } from "./plugin-options-schema";
 
-const config = ({ thoughtsDirectory = "content/garden/" }) => ({
+const config = ({ thoughtsDirectory = "content/garden/" }: PluginOptions) => ({
   plugins: [
     {
       resolve: `gatsby-source-filesystem`,

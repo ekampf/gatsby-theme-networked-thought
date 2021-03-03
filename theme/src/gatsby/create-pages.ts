@@ -20,6 +20,7 @@ const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, report
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pluginOptions = (options as any) as PluginOptions;
 
   const { createPage } = actions;

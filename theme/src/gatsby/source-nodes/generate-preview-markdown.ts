@@ -1,12 +1,14 @@
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+// import { unstable_renderSubtreeIntoContainer } from "react-dom";
 import html from "rehype-stringify";
 import gfm from "remark-gfm";
 import markdown from "remark-parse";
 import remark2rehype from "remark-rehype";
 import stringifyMd from "remark-stringify";
 import unified from "unified";
+// eslint-disable-next-line import/no-unresolved
 import type { Node, Parent } from "unist";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function findDeepestChildForPosition(parent: any, tree: any, position: number): any {
   if (!tree.children || tree.children.length == 0) {
     return {
@@ -41,6 +43,7 @@ function textNoEscaping(this: unified.Processor) {
   const Compiler = this.Compiler;
   const visitors = Compiler.prototype.visitors;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function f(this: any, node: Node, _parent?: Parent) {
     return this.encode(node, node).value;
   }

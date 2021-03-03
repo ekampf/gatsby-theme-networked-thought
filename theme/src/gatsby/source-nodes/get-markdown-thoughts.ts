@@ -54,6 +54,7 @@ export type MarkdownThought = {
 // See https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   if (value === null || value === undefined) return false;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const testDummy: TValue = value;
   return true;
 }
@@ -98,6 +99,7 @@ export default function getMarkdownThoughts({
         fullPath,
         slug,
         name: noteName,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         frontmatter: (frontmatter as any) as ThoughtFrontmatter,
       };
 
