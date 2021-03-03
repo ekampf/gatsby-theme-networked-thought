@@ -22,7 +22,7 @@ function generateSlug(str: string) {
 export type PluginOptions = {
   thoughtsDirectory: string;
   exclude: string[];
-  private: string[];
+  excludeAsPrivate: string[];
   privateMarkdown: string;
   showPrivateLocally: boolean;
   showHiddenLocally: boolean;
@@ -36,7 +36,7 @@ const publicOptionsSchema: GatsbyNode["pluginOptionsSchema"] = ({ Joi }) =>
   Joi.object({
     thoughtsDirectory: Joi.string().default("content/garden/"),
     exclude: Joi.array().items(Joi.string()).default([]),
-    private: Joi.array().items(Joi.string()).default([]),
+    excludeAsPrivate: Joi.array().items(Joi.string()).default([]),
     privateMarkdown: Joi.string().default("This note is a [[private note]]"),
     showPrivateLocally: Joi.boolean().default(true),
     showHiddenLocally: Joi.boolean().default(true),

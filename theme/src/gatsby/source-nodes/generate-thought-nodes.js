@@ -3,7 +3,7 @@ const markdown = require(`remark-parse`);
 
 const linkify = require(`./linkify`).default;
 const { generatePreviewMarkdown, generatePreviewHtml } = require(`./generate-preview-markdown`);
-const { getMarkdownThoughts } = require(`./get-markdown-thoughts`);
+const getMarkdownThoughts = require(`./get-markdown-thoughts`).default;
 
 function getThoughtId(slug, createNodeId) {
   return createNodeId(`Thought::${slug}`);

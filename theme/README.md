@@ -43,7 +43,7 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 | -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `thoughtsDirectory`  | "content/garden/"                 | Directory containing your digital garden notes.                                                         |
 | `exclude`            | []                                | List of strings or regular expressions. Notes files whose names match these will be ignored.            |
-| `private`            | []                                | List of strings or regular expressions. Notes files whose names match these will be considered private. |
+| `excludeAsPrivate`   | []                                | List of strings or regular expressions. Notes files whose names match these will be considered private. |
 | `privateMarkdown`    | "This note is a [[private note]]" | The markdown text to show on private notes when instead of their content.                               |
 | `showPrivateLocally` | true                              | Boolean. Determines whether to show private notes when not running in production.                       |
 | `showHiddenLocally`  | true                              | Boolean. Determines whether to show hidden notes when not running in production.                        |
