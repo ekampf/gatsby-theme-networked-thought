@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { Link, graphql, useStaticQuery } from "gatsby";
-import Img, { FluidObject, GatsbyImageOptionalProps } from "gatsby-image";
+import { GatsbyImage, GatsbyImageProps } from "gatsby-plugin-image";
 import _ from "lodash";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
@@ -44,7 +44,7 @@ function AnchorTag({ href, previews, ...restProps }: AnchorTagProps) {
   );
 }
 
-type ImageProps = { src: string } & GatsbyImageOptionalProps;
+type ImageProps = { src: string } & Omit<GatsbyImageProps, "image">;
 
 function Image(props: ImageProps) {
   const { src, ...rest } = props;
@@ -55,9 +55,7 @@ function Image(props: ImageProps) {
           relativePath
           name
           childImageSharp {
-            fluid(maxWidth: 1800) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
-            }
+            gatsbyImageData(layout: CONSTRAINED, width: 1800)
           }
         }
       }
@@ -76,8 +74,7 @@ function Image(props: ImageProps) {
     return null;
   }
 
-  const fluid = image.childImageSharp?.fluid as FluidObject;
-  return <Img loading="lazy" fadeIn={true} fluid={fluid} {...rest} />;
+  return <GatsbyImage loading="lazy" image={image.childImageSharp?.gatsbyImageData} {...rest} />;
 }
 
 export default {

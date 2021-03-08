@@ -9,8 +9,9 @@ const config = ({ thoughtsDirectory = "content/garden/" }: PluginOptions) => ({
       },
     },
     `gatsby-plugin-theme-ui`,
-    `gatsby-transformer-sharp`,
+    `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     `gatsby-remark-images`,
     {
       resolve: "gatsby-plugin-mdx",
