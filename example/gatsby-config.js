@@ -8,7 +8,9 @@ module.exports = {
   plugins: [
     {
       resolve: `gatsby-theme-networked-thought`,
-      options: {},
+      options: {
+        thoughtsDirectory: "content/garden/",
+      },
     },
   ],
 };

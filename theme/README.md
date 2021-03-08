@@ -19,7 +19,7 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 
 🌗 Light\Dark theme
 
-✨ Gatsby v3 and gatsby-plugin-image
+✨ Gatsby v3 and `gatsby-plugin-image`
 
 ## 🚀 Getting Started
 
@@ -36,14 +36,14 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
   },
 ```
 
-- Create a `content/garden` folder at the and add `about.md`.
+- Create a `content/thoughts` folder at the and add `about.md`.
 - Run your gatsby site and point the browser to the `rootPath` (which is `/` by default so `http://localhost:800/` should do it)
 
 ## 🎓 Usage
 
 | Option               | Default Value                     | Description                                                                                             |
 | -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `thoughtsDirectory`  | "content/garden/"                 | Directory containing your digital garden notes.                                                         |
+| `thoughtsDirectory`  | "content/thoughts/"               | Directory containing your networked thoughts notes.                                                     |
 | `exclude`            | []                                | List of strings or regular expressions. Notes files whose names match these will be ignored.            |
 | `excludeAsPrivate`   | []                                | List of strings or regular expressions. Notes files whose names match these will be considered private. |
 | `privateMarkdown`    | "This note is a [[private note]]" | The markdown text to show on private notes when instead of their content.                               |
