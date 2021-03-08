@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "yarn workspace example build",
+    "serve": "yarn workspace example serve",
     "develop": "yarn workspace example develop",
     "start": "yarn workspace example develop",
     "typecheck": "tsc --noEmit",
