@@ -76,9 +76,7 @@ function processMarkdownThoughts(
       const text = match[0];
       const start = match.index as number;
 
-      // TODO: generate previewMarkdown
       const previewMarkdown = generatePreviewMarkdown(tree, start);
-
       references.push({
         text,
         previewMarkdown,
