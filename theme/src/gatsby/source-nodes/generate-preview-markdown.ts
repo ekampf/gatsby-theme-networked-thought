@@ -54,15 +54,17 @@ function textNoEscaping(this: unified.Processor) {
 export function generatePreviewMarkdown(tree: Node, position: number) {
   let { parent } = findDeepestChildForPosition(null, tree as Parent, position);
 
-  // Adding this logic to avoid including too large an amount of content. May need additional heuristics to improve this
-  // Right now it essentially will just capture the bullet point or paragraph where it is mentioned.
-  const maxDepth = 2;
-  for (let i = 0; i < maxDepth && parent.parent != null && parent.parent.node.type !== "root"; i++) {
-    parent = parent.parent;
+  if (parent) {
+    // Adding this logic to avoid including too large an amount of content. May need additional heuristics to improve this
+    // Right now it essentially will just capture the bullet point or paragraph where it is mentioned.
+    const maxDepth = 2;
+    for (let i = 0; i < maxDepth && parent.parent != null && parent.parent.node.type !== "root"; i++) {
+      parent = parent.parent;
+    }
   }
 
   const processor = unified().use(stringifyMd, { commonmark: true }).use(textNoEscaping).freeze();
-  return processor.stringify(parent.node);
+  return processor.stringify(parent ? parent.node : tree);
 }
 
 export function generatePreviewHtml(markdownText: string) {
