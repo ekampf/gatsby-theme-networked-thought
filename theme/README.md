@@ -19,6 +19,8 @@ It also works very well with [Obsidian](http://obsidian.md/) as an authoring too
 
 🌗 Light\Dark theme
 
+✨ Gatsby v3 and gatsby-plugin-image
+
 ## 🚀 Getting Started
 
 - Start a new Gatsby website (manually or using a starter like the [default starter](https://github.com/gatsbyjs/gatsby-starter-default))
