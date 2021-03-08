@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Link, graphql, useStaticQuery } from "gatsby";
 import { GatsbyImage, GatsbyImageProps } from "gatsby-plugin-image";
-import _ from "lodash";
+import { pick, pickBy, identity } from "lodash";
 import { LinkToStacked } from "react-stacked-pages-hook";
 import { useWindowSize } from "react-use";
 import { Styled, jsx, useColorMode } from "theme-ui";
@@ -63,8 +63,8 @@ function Image(props: ImageProps) {
   `);
 
   if (src.match(/^http/)) {
-    const imageProps = _.pick(rest, ["title", "alt", "className", "style"]);
-    return <img src={src} {..._.pickBy(imageProps, _.identity)} />;
+    const imageProps = pick(rest, ["title", "alt", "className", "style"]);
+    return <img src={src} {...pickBy(imageProps, identity)} />;
   }
 
   const image = data.images.nodes.find(({ relativePath }: { relativePath: string }) => {
