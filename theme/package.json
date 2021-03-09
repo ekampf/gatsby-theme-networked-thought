@@ -6,6 +6,9 @@
   "repository": {
     "url": "https://github.com/ekampf/gatsby-theme-networked-thought"
   },
+  "scripts": {
+    "build:gatsby": "tsc --project tsconfig.gatsby.json"
+  },
   "license": "MIT",
   "peerDependencies": {
     "gatsby": "^3.0.3",
