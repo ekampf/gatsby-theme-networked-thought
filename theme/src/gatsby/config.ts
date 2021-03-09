@@ -1,4 +1,4 @@
-import { PluginOptions } from "./plugin-options-schema";
+import type { PluginOptions } from "./plugin-options-schema";
 
 const config = ({ thoughtsDirectory = "content/garden/" }: PluginOptions) => ({
   plugins: [
