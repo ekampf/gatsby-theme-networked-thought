@@ -2,7 +2,7 @@ const fs = require("fs");
 
 exports.createSchemaCustomization = require("./src/gatsby/create-schema-customization").default;
 exports.pluginOptionsSchema = require("./src/gatsby/plugin-options-schema").default;
-exports.sourceNodes = require("./src/gatsby/source-nodes");
+exports.sourceNodes = require("./src/gatsby/source-nodes").default;
 exports.createPages = require("./src/gatsby/create-pages").default;
 
 exports.onPreBootstrap = ({ reporter }, themeOptions) => {

@@ -91,7 +91,7 @@ const createFSMachine = (api: NodePluginArgs, pluginOptions: PluginOptions) => {
   return interpret(fsMachine).start();
 };
 
-module.exports = async (api: NodePluginArgs, pluginOptions: PluginOptions) => {
+export default async function sourceNodes(api: NodePluginArgs, pluginOptions: PluginOptions) {
   // Validate that the path exists.
   if (!fs.existsSync(pluginOptions.thoughtsDirectory)) {
     api.reporter.panic(`
@@ -134,4 +134,4 @@ Please pick a path to an existing directory.
       fsMachine.send({ type: `CHOKIDAR_READY`, resolve, reject });
     });
   });
-};
+}
