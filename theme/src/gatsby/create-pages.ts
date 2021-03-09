@@ -24,7 +24,7 @@ const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, report
   const pluginOptions = (options as any) as PluginOptions;
 
   const { createPage } = actions;
-  const template = path.resolve(path.join(__dirname, `../src/templates/thought.tsx`));
+  const template = path.resolve(path.join(__dirname, `../templates/thought.tsx`));
   const result = await graphql<CreatePagesQuery>(`
     {
       thoughts: allThought {

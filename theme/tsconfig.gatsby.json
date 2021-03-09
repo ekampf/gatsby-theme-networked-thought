@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "strict": false,
     "module": "commonjs",
-    "outDir": "gatsby",
+    "outDir": "src/.gatsby",
     "target": "es2017",
     "isolatedModules": false,
     "noEmit": false
