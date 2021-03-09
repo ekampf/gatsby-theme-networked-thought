@@ -33,3 +33,6 @@ jobs:
 
       - name: Lint
         run: yarn lint
+
+      - name: build
+        run: yarn build
