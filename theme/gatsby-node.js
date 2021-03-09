@@ -1,1 +1,1 @@
-module.exports = require("./.gatsby/gatsby-node").default;
+module.exports = require("./gatsby/gatsby-node").default;
