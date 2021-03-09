@@ -27,7 +27,7 @@ CreateSchemaCustomizationArgs): any => {
     }
   `;
 
-  reporter.info("Digital Garden: setting up schema...");
+  reporter.info("Networked Thought: setting up schema...");
   createTypes(typeDefs);
 };
 
