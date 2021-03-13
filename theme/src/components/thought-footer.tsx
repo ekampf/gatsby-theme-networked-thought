@@ -39,7 +39,11 @@ export default function ThoughtFooter({ references }: ThoughtFooterProps) {
         <Styled.a sx={{ textDecoration: "underline", color: "muted" }} href={sendDMLink}>
           direct message
         </Styled.a>{" "}
-        me on Twitter and we can talk.
+        me on{" "}
+        <Styled.a href={`https://github.com/${siteMetadata.twitter}`} rel="me">
+          Twitter
+        </Styled.a>{" "}
+        and we can talk.
       </p>
     </Box>
   );
