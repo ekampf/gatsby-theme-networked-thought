@@ -14,7 +14,7 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^3.0.3",
+    "gatsby": "^3.0.4",
     "gatsby-theme-networked-thought": "*",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
