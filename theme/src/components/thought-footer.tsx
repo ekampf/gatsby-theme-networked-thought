@@ -40,7 +40,7 @@ export default function ThoughtFooter({ references }: ThoughtFooterProps) {
           direct message
         </Styled.a>{" "}
         me on{" "}
-        <Styled.a href={`https://github.com/${siteMetadata.twitter}`} rel="me">
+        <Styled.a href={`https://twitter.com/${siteMetadata.twitter}`} rel="me">
           Twitter
         </Styled.a>{" "}
         and we can talk.
