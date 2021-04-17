@@ -2,7 +2,7 @@ import { useStaticQuery, graphql } from "gatsby";
 import React, { PropsWithChildren } from "react";
 import Helmet from "react-helmet";
 
-type SEOProps = {
+export type SEOProps = {
   description?: string;
   lang?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
