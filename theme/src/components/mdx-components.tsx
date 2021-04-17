@@ -47,7 +47,7 @@ function AnchorTag({ href, previews, ...restProps }: AnchorTagProps) {
 type ImageProps = { src: string } & Omit<GatsbyImageProps, "image">;
 
 function Image(props: ImageProps) {
-  const { src, ...rest } = props;
+  const { src, alt, ...rest } = props;
   const data = useStaticQuery(graphql`
     query ImageComponent {
       images: allFile {
@@ -74,7 +74,7 @@ function Image(props: ImageProps) {
     return null;
   }
 
-  return <GatsbyImage loading="lazy" image={image.childImageSharp?.gatsbyImageData} {...rest} />;
+  return <GatsbyImage loading="lazy" image={image.childImageSharp?.gatsbyImageData} alt={alt} />;
 }
 
 export default {
